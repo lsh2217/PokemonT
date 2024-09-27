@@ -1,10 +1,11 @@
-﻿namespace PokemonT
+namespace PokemonT
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            MainScene mainScene = new MainScene();
+            mainScene.DisplayMainUI();
         }
     }
 }
