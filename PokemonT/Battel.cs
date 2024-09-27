@@ -44,7 +44,7 @@ namespace PokemonT
             
         }
 
-        public void BattelMain()
+        public void DisPlayBattelUI()
         {
             Console.Clear();
             Console.WriteLine("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
@@ -83,7 +83,7 @@ namespace PokemonT
 
                 default:
                     InputFail();
-                    BattelMain();
+                    DisPlayBattel();
                     break;
             }
         }
