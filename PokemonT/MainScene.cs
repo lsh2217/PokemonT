@@ -6,13 +6,26 @@ using System.Threading.Tasks;
 
 namespace PokemonT
 {
+
     internal class MainScene
     {
+        Quest quest = new Quest();
+
+
+        public MainScene()
+        {
+            quest.QuestSet();
+        }
+
+
+        
+        
         // 필요한 기능 : 
         // 선택한 화면으로 이동하기
 
         public void DisplayMainUI() // 메인 페이지 UI
         {
+            
             Console.Clear();
             Console.WriteLine("포켓몬스터 T");
             Console.WriteLine("메인 화면");
@@ -44,7 +57,7 @@ namespace PokemonT
                     DisplayStoreUI();
                     break;
                 case 4:
-                    DisplayQuestUI();
+                    quest.DisplayQuestUI();
                     break;
                 case 5:
                     DisplayBattleUI();
@@ -127,7 +140,7 @@ namespace PokemonT
             }
         }
 
-        public void DisplayQuestUI() // 퀘스트 페이지 UI
+        /*public void DisplayQuestUI() // 퀘스트 페이지 UI
         {
             Console.Clear();
             Console.WriteLine("포켓몬스터 T");
@@ -149,7 +162,7 @@ namespace PokemonT
                     DisplayMainUI();
                     break;
             }
-        }
+        }*/
 
         public void DisplayBattleUI() // 전투 화면 UI
         {
@@ -195,4 +208,6 @@ namespace PokemonT
         }
 
     }
+
+    
 }

@@ -5,6 +5,8 @@ namespace PokemonT
         static void Main(string[] args)
         {
             MainScene mainScene = new MainScene();
+            
+
             mainScene.DisplayMainUI();
         }
     }

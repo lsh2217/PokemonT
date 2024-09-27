@@ -19,7 +19,7 @@ namespace PokemonT
         string retryMent = "다시 선택해주세요";
         bool retry = false;
 
-        public void QuestMainView() {
+        public void DisplayQuestUI() {
             do {
                 Console.Clear();
                 questListNumber = 0;
@@ -124,7 +124,7 @@ namespace PokemonT
             acceptQuestList.Add(allQuestList[i].QuestId);
             retry = false;
             acceptQuestListNumber++;
-            QuestMainView();
+            DisplayQuestUI();
         }
 
 
@@ -178,7 +178,7 @@ namespace PokemonT
                 else if (playerChoose == 2)
                 {
                     retry = false;
-                    QuestMainView();
+                    DisplayQuestUI();
                 }
                 else
                 {
