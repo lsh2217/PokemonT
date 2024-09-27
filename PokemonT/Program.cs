@@ -2,9 +2,10 @@
 {
     internal class Program
     {
+        static Battel Battel = new Battel();
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Battel.BattelMain();
         }
     }
 }
