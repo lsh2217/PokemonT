@@ -83,7 +83,7 @@ namespace PokemonT
 
                 default:
                     InputFail();
-                    DisPlayBattel();
+                    DisPlayBattelUI();
                     break;
             }
         }

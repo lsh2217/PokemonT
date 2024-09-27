@@ -31,7 +31,7 @@ namespace PokemonT
     {
         Electric,
         Fire,
-        Weter,
+        Water,
         Grass
     }
 }

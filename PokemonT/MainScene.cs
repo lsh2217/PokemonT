@@ -10,6 +10,7 @@ namespace PokemonT
     internal class MainScene
     {
         Quest quest = new Quest();
+        Battel Battel = new Battel();
 
 
         public MainScene()
@@ -60,7 +61,7 @@ namespace PokemonT
                     quest.DisplayQuestUI();
                     break;
                 case 5:
-                    DisplayBattleUI();
+                    Battel.DisPlayBattelUI();
                     break;
             }
         }
