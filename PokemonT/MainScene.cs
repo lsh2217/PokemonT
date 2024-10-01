@@ -17,13 +17,15 @@ namespace PokemonT
         Shop shop = new Shop();
         StartScene startScene = new StartScene();
         Character player;
+        StatusScene statusScene;
 
 
 
         public MainScene()
         {
             quest.QuestSet();
-            player = startScene.CharacterSetting();
+            player = startScene.CharacterSetting(inventory); // 스타트씬에서 선택한 캐릭터 초기값 세팅
+            statusScene = new StatusScene(this); // MainScene 객체 초기화 및 전달
         }
 
 
@@ -57,7 +59,7 @@ namespace PokemonT
             {
 
                 case 1:
-                    DisplayStatsUI();
+                    statusScene.DisplayStatusUI(player);
                     break;
                 case 2:
                     inventory.DisplayInventoryUI(player);

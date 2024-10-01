@@ -30,9 +30,8 @@ namespace PokemonT
         public int ExtraDef { get; private set; }
 
 
-        // 플레이어가 들고 있을 아이템
-        // public static List<아이템클래스> 인벤토리 = new List<아이템클래스>();  인벤토리에 넣은 아이템 리스트
-        // public static List<아이템클래스> 장착한리스트 = new List<아이템클래스> ; 장착한 아이템 리스트
+        // 플레이어가 들고 시작할 아이템
+        Dictionary<string, (int count, bool isEquipped)> StartingInventory { get; set; }
 
 
         // 캐릭터 클래스 생성자
@@ -44,6 +43,8 @@ namespace PokemonT
             PlayerDef = def;
             PlayerHp = hp;
             PlayerGold = gold;
+
+            StartingInventory = new Dictionary<string, (int, bool)>();
         }
 
         // 각 페이지에 해당하는 함수에 호출할 함수들
@@ -52,11 +53,9 @@ namespace PokemonT
         {
             Console.WriteLine($"이름 {PlayerName} {(PlayerJob)}" );
             Console.WriteLine(ExtraAtk == 0 ? $"공격력 : {PlayerAtk}" : $"공격력 : {PlayerAtk} (+{ExtraAtk})");
-            Console.WriteLine(ExtraAtk == 0 ? $"방어력 : {PlayerDef}" : $"공격력 : {PlayerDef} (+{ExtraDef})");
+            //Console.WriteLine(ExtraAtk == 0 ? $"방어력 : {PlayerDef}" : $"방어력 : {PlayerDef} (+{ExtraDef})");
             Console.WriteLine($"체력 {PlayerHp}");
             Console.WriteLine($"골드 {PlayerGold} G");
-            Console.WriteLine("장착한 포켓몬");
-            Console.WriteLine("퀘스트 달성 현황");
         }
 
         // 인벤토리 표시 함수
