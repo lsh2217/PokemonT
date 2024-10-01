@@ -1,16 +1,14 @@
 ﻿using System;
-namespace poke
+using System.Collections.Generic;
+
+namespace PokemonT
 {
     public class Inventory
     {
-
         public void DisplayInventoryUI()
         {
-
-
-
             int playerGold = 1000;
-            Dictionary<string, (string description, int price, ItemType type)> shopItems = InitializeShopItems();
+            Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems = InitializeShopItems();
             Dictionary<string, (int count, bool isEquipped)> inventory = InitializeInventory();
 
             while (true)
@@ -44,26 +42,28 @@ namespace poke
 
         enum ItemType
         {
-            Healing, // 회복 아이템
-            Equipment // 장비 아이템
+            Equipment
         }
 
-        static Dictionary<string, (string description, int price, ItemType type)> InitializeShopItems()
+        static Dictionary<string, (string description, int attack, int defense, ItemType type)> InitializeShopItems()
         {
-            return new Dictionary<string, (string description, int price, ItemType type)>
+            return new Dictionary<string, (string description, int attack, int defense, ItemType type)>
             {
-                // 회복 아이템
-                { "체력 물약", ("체력을 50 회복합니다.", 100, ItemType.Healing) },
-                { "마나 물약", ("마나를 30 회복합니다.", 150, ItemType.Healing) },
-                { "대형 체력 물약", ("체력을 150 회복합니다.", 300, ItemType.Healing) },
-
-                // 장비 아이템
-                { "수련자 갑옷", ("방어력 +5", 200, ItemType.Equipment) },
-                { "무쇠갑옷", ("방어력 +10", 350, ItemType.Equipment) },
-                { "스파르타의 갑옷", ("방어력 +15", 500, ItemType.Equipment) },
-                { "전설의 검", ("공격력 +10", 300, ItemType.Equipment) },
-                { "마법사의 지팡이", ("마나 공격력 +5", 400, ItemType.Equipment) },
-                { "궁수의 활", ("공격력 +7", 250, ItemType.Equipment) }
+                { "파이리", ("불을 내뿜는 포켓몬입니다.", 10, 5, ItemType.Equipment) },
+                { "꼬북이", ("물속에서 사는 포켓몬입니다.", 5, 7, ItemType.Equipment) },
+                { "이상해씨", ("꽃을 등에 지고 있는 포켓몬입니다.", 7, 6, ItemType.Equipment) },
+                { "리자드", ("날카로운 발톱을 가진 포켓몬입니다.", 12, 6, ItemType.Equipment) },
+                { "어니북이", ("단단한 껍질을 가진 포켓몬입니다.", 6, 8, ItemType.Equipment) },
+                { "이상해풀", ("큰 꽃을 가진 진화된 포켓몬입니다.", 14, 8, ItemType.Equipment) },
+                { "리자몽", ("강력한 불꽃을 내뿜는 포켓몬입니다.", 16, 10, ItemType.Equipment) },
+                { "거북왕", ("강력한 방어력을 가진 물 포켓몬입니다.", 14, 12, ItemType.Equipment) },
+                { "이상해꽃", ("거대한 꽃을 가진 포켓몬입니다.", 18, 14, ItemType.Equipment) },
+                { "피카츄", ("전기를 내뿜는 귀여운 포켓몬입니다.", 8, 4, ItemType.Equipment) },
+                { "라이츄", ("빠른 속도를 자랑하는 전기 포켓몬입니다.", 12, 6, ItemType.Equipment) },
+                { "꼬마돌", ("돌로 이루어진 작은 포켓몬입니다.", 9, 8, ItemType.Equipment) },
+                { "뮤", ("신비로운 능력을 가진 포켓몬입니다.", 20, 15, ItemType.Equipment) },
+                { "잉어킹", ("힘이 약한 물 포켓몬입니다.", 5, 5, ItemType.Equipment) },
+                { "갸라도스", ("강력한 힘을 가진 물 포켓몬입니다.", 18, 12, ItemType.Equipment) }
             };
         }
 
@@ -71,7 +71,7 @@ namespace poke
         {
             return new Dictionary<string, (int, bool)>
             {
-                { "체력 물약", (5, false) }
+                { "파이리", (1, false) }
             };
         }
 
@@ -124,7 +124,7 @@ namespace poke
             }
         }
 
-        static void Shop(ref int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int price, ItemType type)> shopItems)
+        static void Shop(ref int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             while (true)
             {
@@ -135,7 +135,7 @@ namespace poke
                 int index = 1;
                 foreach (var item in shopItems)
                 {
-                    Console.WriteLine($"{index++}. {item.Key} | {item.Value.description} | {item.Value.price} G");
+                    Console.WriteLine($"{index++}. {item.Key} | {item.Value.description} | 공격력: {item.Value.attack}, 방어력: {item.Value.defense}");
                 }
 
                 Console.WriteLine("0. 나가기");
@@ -163,13 +163,13 @@ namespace poke
             }
         }
 
-        static void PurchaseItem(ref int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int price, ItemType type)> shopItems)
+        static void PurchaseItem(ref int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             Console.WriteLine("\n구매할 아이템을 선택하세요:");
             int index = 1;
             foreach (var item in shopItems)
             {
-                Console.WriteLine($"{index++}. {item.Key} ({item.Value.price} G)");
+                Console.WriteLine($"{index++}. {item.Key} ({item.Value.description}) | 가격: {item.Value.attack * 10} G");
             }
 
             Console.WriteLine("0. 나가기");
@@ -182,9 +182,11 @@ namespace poke
                 var selectedItem = new List<string>(shopItems.Keys)[itemIndex - 1];
                 var itemDetails = shopItems[selectedItem];
 
-                if (gold >= itemDetails.price)
+                int price = itemDetails.attack * 10; // 가격을 공격력에 비례하게 설정
+
+                if (gold >= price)
                 {
-                    gold -= itemDetails.price;
+                    gold -= price;
                     if (inventory.ContainsKey(selectedItem))
                     {
                         inventory[selectedItem] = (inventory[selectedItem].count + 1, inventory[selectedItem].isEquipped);
@@ -206,7 +208,7 @@ namespace poke
             }
         }
 
-        static void SellItem(ref int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int price, ItemType type)> shopItems)
+        static void SellItem(ref int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             Console.WriteLine("\n판매할 아이템을 선택하세요:");
             int index = 1;
@@ -227,36 +229,36 @@ namespace poke
 
                 if (itemCount > 0)
                 {
-                    Console.Write($"판매할 {selectedItem}의 수량을 입력하세요 (최대 {itemCount}): ");
-                    string quantityInput = Console.ReadLine();
-
-                    if (int.TryParse(quantityInput, out int sellCount) && sellCount > 0 && sellCount <= itemCount)
+                    int price = (shopItems[selectedItem].attack * 10) / 2; // 판매 가격을 구매 가격의 절반으로 설정
+                    gold += price;
+                    if (itemCount == 1)
                     {
-                        int sellPrice = (int)(0.75 * shopItems[selectedItem].price);
-                        gold += sellPrice * sellCount;
-                        inventory[selectedItem] = (itemCount - sellCount, inventory[selectedItem].isEquipped);
-
-                        if (inventory[selectedItem].count <= 0)
-                        {
-                            inventory.Remove(selectedItem);
-                        }
-
-                        Console.WriteLine($"{sellCount}개 {selectedItem}을(를) {sellPrice * sellCount} G에 판매했습니다.");
+                        inventory.Remove(selectedItem);
                     }
                     else
                     {
-                        Console.WriteLine("잘못된 수량입니다.");
+                        inventory[selectedItem] = (itemCount - 1, inventory[selectedItem].isEquipped);
                     }
+                    Console.WriteLine($"{selectedItem}을(를) 판매했습니다.");
                 }
                 else
                 {
-                    Console.WriteLine("해당 아이템이 없습니다.");
+                    Console.WriteLine("판매할 수 있는 아이템이 없습니다.");
                 }
             }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
             }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Inventory inventory = new Inventory();
+            inventory.DisplayInventoryUI();
         }
     }
 }
