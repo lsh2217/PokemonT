@@ -127,9 +127,12 @@ namespace PokemonT
             DisplayQuestUI();
         }
 
+        public void Questcount(int[] i)
+        {
+            int[] a = i;
+        }
 
-
-        public void QuestInformationDetailView(int i)
+            public void QuestInformationDetailView(int i)
         {
             do 
             {

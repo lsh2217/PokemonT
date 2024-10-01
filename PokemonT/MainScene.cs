@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace PokemonT
 {
 
-    internal class MainScene
+    public class MainScene
     {
         Quest quest = new Quest();
-        Battel Battel = new Battel();
+        Battle Battle = new Battle();
 
 
         public MainScene()
@@ -61,7 +61,7 @@ namespace PokemonT
                     quest.DisplayQuestUI();
                     break;
                 case 5:
-                    Battel.DisPlayBattelUI();
+                    Battle.DisPlayBattelUI(this);
                     break;
             }
         }
