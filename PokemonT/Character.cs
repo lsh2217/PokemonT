@@ -13,7 +13,7 @@ namespace PokemonT
 
     
 
-    internal class Character
+    public class Character
     {
       
         // 이름 / 직업 / 공격력 / 방어력 / 체력 / Gold

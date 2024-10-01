@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PokemonT
 {
@@ -12,12 +13,17 @@ namespace PokemonT
         Quest quest = new Quest();
         Battle Battle = new Battle();
         Input CInput = new Input();
+        Inventory inventory = new Inventory();
+        Shop shop = new Shop();
+        StartScene startScene = new StartScene();
+        Character player;
 
 
 
         public MainScene()
         {
             quest.QuestSet();
+            player = startScene.CharacterSetting();
         }
 
 
@@ -54,10 +60,10 @@ namespace PokemonT
                     DisplayStatsUI();
                     break;
                 case 2:
-                    DisplayInventoryUI();
+                    inventory.DisplayInventoryUI(player);
                     break;
                 case 3:
-                    DisplayStoreUI();
+                    shop.MainShop(player.PlayerGold, inventory.inventory , inventory.shopItems);
                     break;
                 case 4:
                     quest.DisplayQuestUI();
@@ -75,7 +81,7 @@ namespace PokemonT
             Console.WriteLine("상태보기");
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("이름");
+            Console.WriteLine("이름" + player.PlayerName);
             Console.WriteLine("스탯");
             Console.WriteLine("장착한 포켓몬");
             Console.WriteLine("퀘스트 달성 현황");

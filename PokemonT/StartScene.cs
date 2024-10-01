@@ -10,10 +10,11 @@ namespace PokemonT
     internal class StartScene
     {
         Input CInput = new Input();
-        public void CharacterSetting() 
+
+        public Character CharacterSetting() 
         {
             Character player = SetData();
-            
+            return player;
         }
        
         public Character SetData() // 데이터 값 설정하는 함수 (캐릭터 클래스 변수 받아오기)
@@ -54,7 +55,7 @@ namespace PokemonT
             }
 
             // 3. 스타팅 포켓몬 선택
-            Monster firstPokemon = ChooseFirstPokemon();
+           //### Monster firstPokemon = ChooseFirstPokemon();
 
 
             // 객체 생성

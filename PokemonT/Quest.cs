@@ -118,10 +118,10 @@ namespace PokemonT
         {
             List<QuestInformation> questValue = new List<QuestInformation>();
 
-            questValue.Add(new QuestInformation(0, "포켓몬 구매하기", 0, "상점에서 이상해씨를 구매하세요.", 1000, 0, null));
+            questValue.Add(new QuestInformation(0, "포켓몬 구매하기", 0, "상점에서 포켓몬 1마리를 구매하세요.", 1000, 0, null));
             questValue.Add(new QuestInformation(1, "Gold 사용하기", 0, "500Gold를 소모하세요", 1000, 0, null));
-            questValue.Add(new QuestInformation(2, "포켓몬 전투에서 승리", 0, "전투에서 상대 아무포켓몬 2마리를 전투불능으로 만드세요", 0, 1, "파이리"));
-            questValue.Add(new QuestInformation(3, "리자드 전투에서 승리", 1, "전투에서 상대 리자드를 전투불능으로 만드세요", 1500, 2, "상처약"));
+            questValue.Add(new QuestInformation(2, "포켓몬 전투에서 승리", 0, "전투에서 상대 아무포켓몬 2마리를 전투불능으로 만드세요", 0, 1, "꼬렛"));
+            questValue.Add(new QuestInformation(3, "리자드 전투에서 승리", 1, "전투에서 상대 리자드를 전투불능으로 만드세요", 1500, 2, "고오스"));
             //questValue.Add(new QuestInformation(4, "진화의 돌 사용", 1, "아무포켓몬에게 진화의 돌을 사용하여 진화시켜 보세요", 0, 2, "진화의 돌"));
             
 
