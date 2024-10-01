@@ -9,12 +9,36 @@ namespace PokemonT
     // 필요한 기능
     // 캐릭터의 정보 표시 
     // 장비 반영에 따른 정보 - 장착한 포켓몬
+    // 퀘스트 달성 현황 확인
 
 
-    // 필요한 변수 
-    // 이름 / 직업 / 공격력 / 방어력 / 체력 / Gold
-    // 추가 공격력 / 추가 방어력
     internal class StatusScene
     {
+        public void DisplayStatusUI() // 상태보기 UI - 메인 씬 중복 내용 추후 삭제
+        {
+            Console.Clear();
+            Console.WriteLine("포켓몬스터 T");
+            Console.WriteLine("상태보기");
+            // DisplayCharacterStatus() 호출
+
+            Console.WriteLine("장착한 포켓몬");
+            // DisplayEquippedItem() 호출
+
+            Console.WriteLine("퀘스트 달성 현황");
+
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("0을 눌러 메인 화면으로 이동하기");
+            Console.Write(">>");
+
+
+
+        }
+
+
+        
+
     }
+
 }
