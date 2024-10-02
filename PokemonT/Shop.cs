@@ -11,9 +11,11 @@ namespace PokemonT
     public class Shop
     {
         MainScene mainScene;
+        Quest quest;
         Input CInput = new Input();
-        public void MainShop(MainScene displayMainUI,   int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void MainShop(MainScene displayMainUI, Quest questInfomation, int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
+            quest = questInfomation;
             mainScene = displayMainUI;
             while (true)
             {
@@ -23,7 +25,7 @@ namespace PokemonT
                 Console.WriteLine("[아이템 목록]");
 
                 int index = 1;
-                foreach (var item in shopItems) 
+                foreach (var item in shopItems)
                 {
                     Console.WriteLine($"{index++}. {item.Key} | {item.Value.description} | 공격력: {item.Value.attack}, 방어력: {item.Value.defense}");
                 }
@@ -73,17 +75,17 @@ namespace PokemonT
 
             if (choice == "0") return;
 
-            if (int.TryParse(choice, out int itemIndex) && itemIndex > 0 && itemIndex <= shopItems.Count )
+            if (int.TryParse(choice, out int itemIndex) && itemIndex > 0 && itemIndex <= shopItems.Count)
             {
                 var selectedItem = new List<string>(shopItems.Keys)[itemIndex - 1];
                 var itemDetails = shopItems[selectedItem];
 
                 int price = itemDetails.attack * 10; // 가격을 공격력에 비례하게 설정
-                
+
                 if (gold >= price)
                 {
-                  
-                
+
+
                     if (inventory.ContainsKey(selectedItem)) //인벤토리 1 2, 3안에 키가 있고 그 키를 상점의 키랑 비교 1,2,3,4,5,6,7
                     {
                         //inventory[selectedItem] = (inventory[selectedItem].count + 1, inventory[selectedItem].isEquipped);
@@ -93,8 +95,9 @@ namespace PokemonT
                     else
                     {
                         gold -= price;
-
                         inventory.Add(selectedItem, (1, false));
+                        //quest.tossQuestInformation_0();
+                        //quest.tossQuestInformation_1(price);
                     }
                     Console.WriteLine($"{selectedItem}을(를) 구매했습니다.");
                 }
