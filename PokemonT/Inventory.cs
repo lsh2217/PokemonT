@@ -11,11 +11,12 @@ namespace PokemonT
         public Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems;
         public Dictionary<string, (int count, bool isEquipped)> inventory; 
 
-        public void DisplayInventoryUI(Character player)
-        {
-
+        public Inventory() {
             shopItems = InitializeShopItems();
             inventory = InitializeInventory();
+        }
+        public void DisplayInventoryUI(Character player)
+        {
 
             Console.Clear();
             Console.WriteLine("\n=== 게임 ===");

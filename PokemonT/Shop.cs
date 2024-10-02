@@ -77,10 +77,10 @@ namespace PokemonT
                 {
                     gold -= price;
                 
-                    if (inventory.ContainsKey(selectedItem)) //인벤토리 1 2, 3안에 키가 있고 그 키를 상점의 키랑 비교 1,2,3,4,5,6,7
+                    if (inventory.ContainsKey(selectedItem))
                     {
                         inventory[selectedItem] = (inventory[selectedItem].count + 1, inventory[selectedItem].isEquipped);
-                        //inventory[5] = {6,  변수명이 isEquipped 인거지 그냥 샀냐 ? 안샀냐 ?의 변수}
+                       
                     }
                     else
                     {

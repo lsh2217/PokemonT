@@ -24,13 +24,14 @@ namespace PokemonT
 
         MonsterManager MonsterManager = new MonsterManager(); // 몬스터 관리 클레스
         DungeonManager DungeonManager; // 스테이지 관리 클레스
-        Monster[] StageMonster = new Monster[6]; // 스테이지에 등장 할 몬스터
+        public Monster[] StageMonster = new Monster[6]; // 스테이지에 등장 할 몬스터
 
         MonsterManager PlayerMonsterManager = new MonsterManager(); // 임시 플레이어
         List<Monster> PlayerMonster = new List<Monster>(); // 임시 플레이어
 
         MainScene mainScene;
         Inventory inven;
+        Quest quest;
 
         int[] MonsterDieID = new int[6];
         int MCount = 0;
@@ -48,10 +49,10 @@ namespace PokemonT
             }
         }
 
-        public void DisPlayBattelUI(MainScene displayMainUI)
+        public void DisPlayBattelUI(MainScene displayMainUI , Quest questInformation)
         {
             mainScene = displayMainUI;
-
+            quest = questInformation;
             Console.Clear();
             Console.WriteLine("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
             for (int i = 0; i < 5; i++)
@@ -98,7 +99,7 @@ namespace PokemonT
 
                 default:
                     InputFail();
-                    DisPlayBattelUI(displayMainUI);
+                    DisPlayBattelUI(displayMainUI , quest);
                     break;
             }
         }
@@ -125,7 +126,7 @@ namespace PokemonT
                     Thread.Sleep(1000);
                     Console.WriteLine("아무 키나 누르세요.");
                     ResetData();
-                    DisPlayBattelUI(mainScene);
+                    DisPlayBattelUI(mainScene, quest);
                 }
                 else recount = 0;
             }
@@ -202,7 +203,8 @@ namespace PokemonT
             int count = 0;
             for (int i = 0; i < mon.Length; i++)
             {
-                if (mon[i].Die) count++;
+                if (mon[i] == null) break;
+                else if (mon[i].Die) count++;
             }
             if (count == DungeonManager.Dungeons[CurrentStage - 1].Monstercount)
             {
@@ -315,9 +317,11 @@ namespace PokemonT
             // 아이템
 
             Console.WriteLine("아무 키나 누르세요.");
+            quest.tossQuestInformation_2(DeathCount(StageMonster));
+            quest.tossQuestInformation_3(DeathCount(StageMonster));
             PlayerAction();
             ResetData();
-            this.DisPlayBattelUI(mainScene);
+            this.DisPlayBattelUI(mainScene, quest);
         }
         public void StageFail()
         {
