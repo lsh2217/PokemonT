@@ -50,7 +50,7 @@ namespace PokemonT
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("숫자를 눌러 원하는 곳으로 이동하기");
-            Console.Write(">>");
+            Console.Write(">> ");
 
 
             int result = CInput.CheckInput(1,5); // 이동할 선택지 범위
@@ -90,7 +90,7 @@ namespace PokemonT
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("0을 눌러 메인 화면으로 이동하기");
-            Console.Write(">>");
+            Console.Write(">> ");
 
             int result = CInput.CheckInput(0,0);
 
@@ -114,7 +114,7 @@ namespace PokemonT
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("숫자를 눌러 원하는 행동하기");
-            Console.Write(">>");
+            Console.Write(">> ");
 
             int result = CInput.CheckInput(0, 0);
 
@@ -138,7 +138,7 @@ namespace PokemonT
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("숫자를 눌러 원하는 행동하기");
-            Console.Write(">>");
+            Console.Write(">> ");
 
             int result = CInput.CheckInput(0, 0);
 
@@ -162,7 +162,7 @@ namespace PokemonT
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("숫자를 눌러 원하는 행동하기");
-            Console.Write(">>");
+            Console.Write(">> ");
 
             int result = CheckInput(0, 0);
 
@@ -187,7 +187,7 @@ namespace PokemonT
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("숫자를 눌러 원하는 행동하기");
-            Console.Write(">>");
+            Console.Write(">> ");
 
             int result = CInput.CheckInput(0, 0);
 

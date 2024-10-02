@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PokemonT
 {
@@ -19,9 +20,25 @@ namespace PokemonT
        
         public Character SetData(Inventory inventory) // 데이터 값 설정하는 함수 (캐릭터 클래스 변수 받아오기)
         {
+            // 시작 대사
+            Console.WriteLine("오박사 : ");
+            Console.WriteLine("안녕! 포켓몬의 세계에 온 걸 환영해!");
+            Console.WriteLine("나는 이 세상에서 '포켓몬'이라 불리는 생명체들을 연구하는 교수를 맡고 있어.");
+            Console.WriteLine();
+            Console.WriteLine();
+
             // 1. 플레이어 이름 입력 받기
-            Console.Write("플레이어 이름을 입력하세요: ");
+            Console.WriteLine("먼저, 너의 이름을 알려줄래?");
+            Console.Write(">> ");
             string name = Console.ReadLine();
+
+            Console.Clear();
+            Console.WriteLine("오박사 : ");
+            Console.WriteLine($"{name}, 멋진 이름이구나.");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("아무 키나 눌러 넘어가기");
+            Console.ReadKey();
 
             // 2. 플레이어 초기 스탯 설정
             int atk = 0;
@@ -35,22 +52,22 @@ namespace PokemonT
 
             switch (jobs)
             {
-                case "풀 타입":
-                    atk = 12;
-                    def = 8;
-                    hp = 90;
+                case "포켓몬 트레이너":
+                    atk = 20;
+                    def = 10;
+                    hp = 120;
                     break;
 
-                case "물 타입":
-                    atk = 10;
-                    def = 10;
+                case "포켓몬 브리더":
+                    atk = 15;
+                    def = 15;
                     hp = 100;
                     break;
 
-                case "불 타입":
-                    atk = 14;
-                    def = 6;
-                    hp = 110;
+                case "포켓몬 연구원":
+                    atk = 10;
+                    def = 20;
+                    hp = 80;
                     break;
             }
 
@@ -66,13 +83,24 @@ namespace PokemonT
 
         public string ChooseJob() 
         {
-            List<string> jobs = new List<string>() { "풀 타입", "물 타입", "불 타입" };
-            Console.WriteLine("트레이너의 타입을 선택하세요:");        
+            Console.Clear();
+            Console.WriteLine("오박사 : ");
+            Console.WriteLine("포켓몬 세계에서 새로운 모험이 곧 시작될 거야.");
+            Console.WriteLine("그런데, 너는 어떤 일을 하며 살아갈지 정해야 해. 너는 어떤 직업을 선택할 거야?");
+            Console.WriteLine();
+            Console.WriteLine();
+
+            List<string> jobs = new List<string>()
+            { "포켓몬 트레이너", "포켓몬 브리더", "포켓몬 연구원" };
+            
             for (int i = 0; i < jobs.Count; i++) // 타입 출력
             {
                 Console.WriteLine($"{i + 1}. {jobs[i]}");
             }
 
+            Console.WriteLine();
+            Console.WriteLine("직업 번호를 선택하세요:");
+            Console.Write(">> ");
             int choice = CInput.CheckInput(1, jobs.Count);
 
             //선택한 숫자에 따라 직업 할당 (switch문)
@@ -80,19 +108,27 @@ namespace PokemonT
             switch (choice)
             {
                 case 1:
-                    playerJob = jobs[0]; // "풀 타입"
+                    playerJob = jobs[0]; // "포켓몬 트레이너"
                     break;
                 case 2:
-                    playerJob = jobs[1]; // "물 타입"
+                    playerJob = jobs[1]; // "포켓몬 브리더"
                     break;
                 case 3:
-                    playerJob = jobs[2]; // "불 타입"
+                    playerJob = jobs[2]; // "포켓몬 연구원"
                     break;
             }
+
+
+            Console.Clear();
+            Console.WriteLine("오박사 : ");
+            Console.WriteLine($"{playerJob}, 좋은 선택이야!");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("아무 키나 눌러 넘어가기");
+            Console.ReadKey();
+
             return playerJob;
         }
-
-        
 
     }
 }
