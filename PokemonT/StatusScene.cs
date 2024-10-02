@@ -25,18 +25,19 @@ namespace PokemonT
         }
 
 
-        public void DisplayStatusUI(Character player) // 상태보기 UI - 메인 씬 중복 내용 추후 삭제
+        public void DisplayStatusUI(Character player, Inventory inventory) // 상태보기 UI - 메인 씬 중복 내용 추후 삭제
         {
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("<<상태보기>>");
             Console.WriteLine();
+            // player.EquipPokemon(inventory, "이상해씨");
             player.DisplayCharacterStatus();
             Console.WriteLine();
             Console.WriteLine("<<장착한 포켓몬>>");
             Console.WriteLine();
-            // DisplayEquippedItems(); 
+            DisplayEquippedItems(inventory); 
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("0을 눌러 메인 화면으로 이동하기");

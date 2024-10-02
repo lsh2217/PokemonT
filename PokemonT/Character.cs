@@ -47,16 +47,31 @@ namespace PokemonT
             StartingInventory = new Dictionary<string, (int, bool)>();
         }
 
+        // 포켓몬 장착 후 추가 공격력/방어력 설정
+        public void SetEquipPokemonStat(Inventory inventory, string pokemonName)
+        {
+            if (inventory.inventory.ContainsKey(pokemonName))
+            {
+                
+                // 포켓몬 공격력과 방어력 추출
+                var pokemon = inventory.inventory[pokemonName];
+
+                ExtraAtk = pokemon.attack;
+                ExtraDef = pokemon.defence;
+            }
+        }
+
         // 각 페이지에 해당하는 함수에 호출할 함수들
         // 스테이터스 - 캐릭터 스탯 표시 함수
         public void DisplayCharacterStatus() 
         {
             Console.WriteLine($"- 이름 : {PlayerName} ({PlayerJob})" );
             Console.WriteLine(ExtraAtk == 0 ? $"- 공격력 : {PlayerAtk}" : $"- 공격력 : {PlayerAtk} (+{ExtraAtk})");
-            //Console.WriteLine(ExtraAtk == 0 ? $"- 방어력 : {PlayerDef}" : $"- 방어력 : {PlayerDef} (+{ExtraDef})");
+            Console.WriteLine(ExtraAtk == 0 ? $"- 방어력 : {PlayerDef}" : $"- 방어력 : {PlayerDef} (+{ExtraDef})");
             Console.WriteLine($"- 체력 : {PlayerHp}");
             Console.WriteLine($"- 골드 : {PlayerGold} G");
         } 
+
 
     }
 }
