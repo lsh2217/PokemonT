@@ -25,18 +25,19 @@ namespace PokemonT
         }
 
 
-        public void DisplayStatusUI(Character player) // 상태보기 UI - 메인 씬 중복 내용 추후 삭제
+        public void DisplayStatusUI(Character player, Inventory inventory) // 상태보기 UI - 메인 씬 중복 내용 추후 삭제
         {
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("<<상태보기>>");
             Console.WriteLine();
+            // player.EquipPokemon(inventory, "이상해씨");
             player.DisplayCharacterStatus();
-
-            Console.WriteLine("장착한 포켓몬");
             Console.WriteLine();
-            // DisplayEquippedItem() 호출
+            Console.WriteLine("<<장착한 포켓몬>>");
+            Console.WriteLine();
+            DisplayEquippedItems(inventory); 
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("0을 눌러 메인 화면으로 이동하기");
@@ -52,9 +53,27 @@ namespace PokemonT
                     break;
             }
 
-
         }
 
+        public void DisplayEquippedItems(Inventory inventory)
+        {
+           
+            bool isEquipped = false;
+
+            foreach (var item in inventory.inventory)
+            {
+                if (item.Value.isEquipped) // 장착된 아이템만 출력
+                {
+                    Console.WriteLine($"- {item.Key} (x{item.Value.count})");
+                    isEquipped = true;
+                }
+            }
+
+            if (!isEquipped)
+            {
+                Console.WriteLine("장착한 포켓몬이 없습니다.");
+            }
+        }
     }
 
 }

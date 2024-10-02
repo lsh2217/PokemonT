@@ -53,7 +53,7 @@ namespace PokemonT
             Console.WriteLine($"{playerJob}, 좋은 선택이야!");
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("아무 키나 눌러 넘어가기");
+            Console.Write("아무 키나 눌러 넘어가기");
             Console.ReadKey();
 
             return playerJob;

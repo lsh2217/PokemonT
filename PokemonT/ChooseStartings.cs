@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -22,7 +23,7 @@ namespace PokemonT
         };
 
 
-        public void ChooseFirstPokemon(Inventory inventory)
+        public void ChooseFirstPokemon(Inventory inventory, Character player)
         {
                         
             // 세 포켓몬 초기화
@@ -49,9 +50,11 @@ namespace PokemonT
             var chosenPokemonKey = FirstPokemons.Keys.ElementAt(choice - 1);
             var chosenPokemon = FirstPokemons[chosenPokemonKey];
 
-            // 선택한 포켓몬을 인벤토리에 추가
+            // 선택한 포켓몬을 인벤토리에 추가,
             inventory.inventory.Add(chosenPokemonKey, (1, true, FirstPokemons[chosenPokemonKey].attack, FirstPokemons[chosenPokemonKey].defense));
 
+            // 선택한 포켓몬 스탯값 캐릭터 스탯에 더하기
+            player.SetEquipPokemonStat(inventory, chosenPokemonKey);
 
             // 선택하지 않은 포켓몬들을 상점 아이템(InitializeShopItems)에 넣음
             foreach (var pokemon in FirstPokemons)
@@ -83,7 +86,7 @@ namespace PokemonT
             Console.WriteLine();
             Console.WriteLine($"이제 진정한 모험이 시작될 시간이야. 준비됐니? ");
             Console.WriteLine();
-            Console.WriteLine(">> 아무 버튼이나 입력하여 모험 시작");
+            Console.Write(">> 아무 버튼이나 입력하여 모험 시작");
             Console.ReadKey();
             
         }  

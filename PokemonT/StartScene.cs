@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -41,7 +42,7 @@ namespace PokemonT
             Console.WriteLine($"{name}, 멋진 이름이구나.");
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("아무 키나 눌러 넘어가기");
+            Console.Write("아무 키나 눌러 넘어가기");
             Console.ReadKey();
 
             // 2. 플레이어 초기 스탯 설정
@@ -76,13 +77,15 @@ namespace PokemonT
                     break;
             }
 
-            // 4. 스타팅 포켓몬 선택
-            ChooseStarting firstPokemon = new ChooseStarting();
-            firstPokemon.ChooseFirstPokemon(inventory);
+           
+            // 4. 객체 생성
+            Character player = new Character(name,jobs, atk, def, hp, gold);
 
-            // 객체 생성
-            Character Player = new Character(name,jobs, atk, def, hp, gold);
-            return Player;
+            // 5. 스타팅 포켓몬 선택
+            ChooseStarting firstPokemon = new ChooseStarting();
+            firstPokemon.ChooseFirstPokemon(inventory, player);
+
+            return player;
         }
 
     }

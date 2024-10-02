@@ -59,7 +59,7 @@ namespace PokemonT
             {
 
                 case 1:
-                    statusScene.DisplayStatusUI(player);
+                    statusScene.DisplayStatusUI(player, inventory);
                     break;
                 case 2:
                     inventory.DisplayInventoryUI(player, this);
