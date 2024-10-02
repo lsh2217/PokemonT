@@ -114,11 +114,12 @@ namespace PokemonT
                 var selectedItem = equipableItems[itemIndex - 1];
                 inventory[selectedItem] = (inventory[selectedItem].count, true, inventory[selectedItem].attack, inventory[selectedItem].defence);
                 Console.WriteLine($"{selectedItem}을(를) 장착했습니다.");
+                ShowInventory(ref inventory);
             }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
-               // EquipItem(ref inventory);
+                EquipItem(ref inventory);
             }
         }
 

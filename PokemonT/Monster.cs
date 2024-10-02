@@ -13,6 +13,8 @@ namespace PokemonT
         public int Attack { get; set; }
         public int Hp {  get; set; }
         public bool Die { get; set; }
+        public bool isEquipped { get; set; }
+        public Monster() { }
         public Monster(string id, string name, int attack, int hp, bool die) 
         {
             Id = id;

@@ -30,6 +30,7 @@ namespace PokemonT
 
         MonsterManager PlayerMonsterManager = new MonsterManager(); // 임시 플레이어
         List<Monster> PlayerMonster = new List<Monster>(); // 임시 플레이어
+        Monster PlayerSetMonster = new Monster();
 
         MainScene mainScene;
         Inventory inven;
@@ -45,11 +46,6 @@ namespace PokemonT
         public Battle()
         {
             DungeonManager = new DungeonManager(MonsterManager.DungeonMonsters);
-
-            foreach (Monster monster in PlayerMonsterManager.Monsters)
-            {
-                //PlayerMonster.Add(monster);
-            }
         }
 
         public void DisPlayBattelUI(MainScene displayMainUI, Quest questInformation, Character player, Inventory inventory)
@@ -62,7 +58,7 @@ namespace PokemonT
             Console.WriteLine("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
             for (int i = 0; i < 5; i++)
             {
-                Console.WriteLine($"{i + 1}. Stage.{i + 1} Lv.{(DungeonManager.Dungeons[i].Level + " 이상" + "")}");
+                Console.WriteLine($"{i + 1}. Stage.{i + 1} {(DungeonManager.Dungeons[i].Monstercount + "마리 등장" + "")}");
             }
             Console.WriteLine("6. 장착관리");
             Console.WriteLine("0. 나가기\n");
@@ -111,6 +107,7 @@ namespace PokemonT
             Console.WriteLine($"Batterl!\n");
             if (BatterStert == false)
             {
+                StagePlayer();
                 StageEnumy(DungeonManager.Dungeons[stage - 1].Monstercount); // 몬스터 생성
 
                 int recount = 0;
@@ -118,11 +115,12 @@ namespace PokemonT
                 {
                     if (PlayerMonster[i].Die) recount++;
                 }
-                if (recount == DungeonManager.Dungeons[stage - 1].Monstercount)
+                if (recount == PlayerMonster.Count)
                 {
                     Console.WriteLine($"전투가 가능한 포켓몬이 없습니다!\n");
                     Thread.Sleep(1000);
                     Console.WriteLine("아무 키나 누르세요.");
+                    PlayerAction();
                     ResetData();
                     DisPlayBattelUI(mainScene, quest, playerBattle, inven);
                 }
@@ -135,7 +133,7 @@ namespace PokemonT
             for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
             {
                 if (StageMonster[i].Die == true) Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.Write($"{(PlayerTurn == true ? (i + 1) + ". " : "")} {StageMonster[i].Name} HP {StageMonster[i].Hp} 공격력 {StageMonster[i].Attack}");
+                Console.Write($"{(PlayerTurn == true ? (i + 1) + "." : "")}{StageMonster[i].Name} HP {StageMonster[i].Hp} 공격력 {StageMonster[i].Attack}");
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($" {(MonsterTurnNum == i + 1 && MonsterTurn && !StageMonster[i].Die ? "<== 현재 턴" : "")}");
@@ -144,7 +142,7 @@ namespace PokemonT
 
             Console.WriteLine();
             Console.WriteLine("[내 포켓몬]");
-            for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
+            for (int i = 0; i < PlayerMonster.Count; i++)
             {
                 if (PlayerMonster[i].Die == true) Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.Write($"{PlayerMonster[i].Name} HP {PlayerMonster[i].Hp} 공격력 {PlayerMonster[i].Attack}");
@@ -155,14 +153,14 @@ namespace PokemonT
             }            
 
             if (DeathCount(StageMonster) == DungeonManager.Dungeons[stage - 1].Monstercount) StageClear();
-            if (DeathCount(PlayerMonster) == DungeonManager.Dungeons[stage - 1].Monstercount) StageFail();
+            if (DeathCount(PlayerMonster) == PlayerMonster.Count) StageFail();
             if (PlayerTurn && !MonsterTurn) PlayerAttack();
             if (!PlayerTurn && MonsterTurn) MonsterAttack();
 
             Console.WriteLine();
             if (PlayerTurn && !MonsterTurn)
             {
-                for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
+                for (int i = 0; i < PlayerMonster.Count; i++)
                 {
                     if (PlayerTurnNum - 1 == i)
                     {
@@ -201,7 +199,7 @@ namespace PokemonT
             {
                 if (mon[i].Die) count++;
             }
-            if (count == DungeonManager.Dungeons[CurrentStage - 1].Monstercount)
+            if (count == PlayerMonster.Count)
             {
                 return count;
             }
@@ -239,16 +237,23 @@ namespace PokemonT
             }
         }
         public void StagePlayer()
-        {
-            
-            foreach (var item in inven.shopItems)
+        {            
+            foreach (var item in inven.inventory)
             {
-                
+                var playerMonster = new Monster
+                {
+                    Id = item.Key,
+                    Name = item.Key,
+                    Attack = item.Value.attack,
+                    Hp = item.Value.defence,
+                    Die = item.Value.defence <= 0
+                };
+                if(item.Value.isEquipped) PlayerMonster.Add(playerMonster);
             }
         }
         public void PlayerAttack()
         {
-            if (DungeonManager.Dungeons[CurrentStage - 1].Monstercount >= PlayerTurnNum)
+            if (PlayerMonster.Count >= PlayerTurnNum)
             {
                 if (!PlayerMonster[PlayerTurnNum - 1].Die)
                 {
@@ -261,7 +266,7 @@ namespace PokemonT
                     else
                     {
                         bool success = PerformAttack(PlayerMonster[PlayerTurnNum - 1], StageMonster[MonsterSelect - 1],
-                                            ref PlayerTurnNum, DungeonManager.Dungeons[CurrentStage - 1].Monstercount,
+                                            ref PlayerTurnNum, PlayerMonster.Count,
                                             id => MonsterDieID[MCount++] = id, true);
 
                         if (!success)
@@ -273,7 +278,7 @@ namespace PokemonT
                 }
                 else PlayerTurnNum++;
             }
-            else if (DungeonManager.Dungeons[CurrentStage - 1].Monstercount < PlayerTurnNum)// 마지막으로 곡격 시 턴 종료
+            else if (PlayerMonster.Count < PlayerTurnNum)// 마지막으로 곡격 시 턴 종료
             {
                 MonsterTurn = true;
                 PlayerTurn = false;
@@ -285,7 +290,7 @@ namespace PokemonT
         {
             while (true)
             {
-                MonsterSelect = new Random().Next(1, DungeonManager.Dungeons[CurrentStage - 1].Monstercount + 1);
+                MonsterSelect = new Random().Next(1, PlayerMonster.Count + 1);
                 if (!PlayerMonster[MonsterSelect - 1].Die)
                 {
                     break;
@@ -418,6 +423,20 @@ namespace PokemonT
         {
             Console.WriteLine("전투에서 패배했습니다");
             Thread.Sleep(1000);
+            foreach (var playerMonster in PlayerMonster)
+            {
+                if (inven.inventory.ContainsKey(playerMonster.Id))
+                {
+                    var inventoryItem = inven.inventory[playerMonster.Id];
+
+                    inven.inventory[playerMonster.Id] = (
+                        inventoryItem.count,
+                        inventoryItem.isEquipped,
+                        inventoryItem.attack,
+                        playerMonster.Hp
+                    );
+                }
+            }
             Console.WriteLine("아무 키나 누르세요.");
             PlayerAction();
             ResetData();
@@ -437,6 +456,7 @@ namespace PokemonT
             PlayerSelect = -1;
             MonsterSelect = -1;
             CurrentStage = -1;
+            PlayerMonster.Clear();
         }
         public int PlayerAction()
         {
