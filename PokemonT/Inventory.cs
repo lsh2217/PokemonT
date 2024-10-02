@@ -54,11 +54,8 @@ namespace PokemonT
         {
             return new Dictionary<string, (string description, int attack, int defense, ItemType type)>
             {
-                //{ "파이리", ("불을 내뿜는 포켓몬입니다.", 10, 5, ItemType.Equipment) },
-                //{ "꼬북이", ("물속에서 사는 포켓몬입니다.", 5, 7, ItemType.Equipment) },
-                //{ "이상해씨", ("꽃을 등에 지고 있는 포켓몬입니다.", 7, 6, ItemType.Equipment) },
                 { "리자드", ("날카로운 발톱을 가진 포켓몬입니다.", 12, 6, ItemType.Equipment) },
-                { "어니북이", ("단단한 껍질을 가진 포켓몬입니다.", 6, 8, ItemType.Equipment) },
+                { "어니부기", ("단단한 껍질을 가진 포켓몬입니다.", 6, 8, ItemType.Equipment) },
                 { "이상해풀", ("큰 꽃을 가진 진화된 포켓몬입니다.", 14, 8, ItemType.Equipment) },
                 { "리자몽", ("강력한 불꽃을 내뿜는 포켓몬입니다.", 16, 10, ItemType.Equipment) },
                 { "거북왕", ("강력한 방어력을 가진 물 포켓몬입니다.", 14, 12, ItemType.Equipment) },
@@ -116,6 +113,11 @@ namespace PokemonT
             {
                 var selectedItem = equipableItems[itemIndex - 1];
                 inventory[selectedItem] = (inventory[selectedItem].count, true, inventory[selectedItem].attack, inventory[selectedItem].defence);
+
+                // 장착한 포켓몬 값 플레이어 스탯값에 추가
+                Character.ExtraAtk += inventory[selectedItem].attack;
+                Character.ExtraDef += inventory[selectedItem].defence;
+
                 Console.WriteLine($"{selectedItem}을(를) 장착했습니다.");
             }
             else
