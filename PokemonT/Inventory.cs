@@ -113,6 +113,11 @@ namespace PokemonT
             {
                 var selectedItem = equipableItems[itemIndex - 1];
                 inventory[selectedItem] = (inventory[selectedItem].count, true, inventory[selectedItem].attack, inventory[selectedItem].defence);
+
+                // 장착한 포켓몬 값 플레이어 스탯값에 추가
+                Character.ExtraAtk += inventory[selectedItem].attack;
+                Character.ExtraDef += inventory[selectedItem].defence;
+
                 Console.WriteLine($"{selectedItem}을(를) 장착했습니다.");
             }
             else

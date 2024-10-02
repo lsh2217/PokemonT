@@ -26,8 +26,8 @@ namespace PokemonT
         public int PlayerGold { get; set; }
 
         // 몬스터 장착으로 인한 추가 공격력 / 추가 방어력 
-        public int ExtraAtk { get; private set; }
-        public int ExtraDef { get; private set; }
+        public static int ExtraAtk { get; set; }
+        public static int ExtraDef { get; set; }
 
 
         // 플레이어가 들고 시작할 아이템
@@ -67,7 +67,7 @@ namespace PokemonT
         {
             Console.WriteLine($"- 이름 : {PlayerName} ({PlayerJob})" );
             Console.WriteLine(ExtraAtk == 0 ? $"- 공격력 : {PlayerAtk}" : $"- 공격력 : {PlayerAtk} (+{ExtraAtk})");
-            Console.WriteLine(ExtraAtk == 0 ? $"- 방어력 : {PlayerDef}" : $"- 방어력 : {PlayerDef} (+{ExtraDef})");
+            Console.WriteLine(ExtraDef == 0 ? $"- 방어력 : {PlayerDef}" : $"- 방어력 : {PlayerDef} (+{ExtraDef})");
             Console.WriteLine($"- 체력 : {PlayerHp}");
             Console.WriteLine($"- 골드 : {PlayerGold} G");
         } 
