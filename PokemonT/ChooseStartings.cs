@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static PokemonT.Inventory;
 
 namespace PokemonT
@@ -13,26 +14,36 @@ namespace PokemonT
         Input CInput = new Input();
         Dictionary<string, (string description, int attack, int defense, Inventory.ItemType type)> FirstPokemons = new Dictionary<string, (string, int, int, Inventory.ItemType)>
         {
-            { "이상해씨", ("꽃을 등에 지고 있는 포켓몬입니다.", 7, 6, Inventory.ItemType.Equipment)},
-            { "파이리", ("불을 내뿜는 포켓몬입니다.", 10, 5, Inventory.ItemType.Equipment) },
-            { "꼬북이", ("물속에서 사는 포켓몬입니다.", 5, 7, Inventory.ItemType.Equipment) }
+            { "이상해씨", ("등에 씨앗이 자라며 자연의 힘을 사용해 전투하는 풀 타입포켓몬입니다.", 7, 6, Inventory.ItemType.Equipment)},
+            { "파이리", ("꼬리 끝의 불꽃이 꺼지지 않으며 강력한 불꽃 공격을 하는 불 타입 포켓몬입니다.", 10, 5, Inventory.ItemType.Equipment) },
+            { "꼬부기", ("물을 발사해 적을 공격하는 물 타입 포켓몬입니다.", 5, 7, Inventory.ItemType.Equipment) }
 
         };
 
 
         public void ChooseFirstPokemon(Inventory inventory)
         {
+                        
             // 세 포켓몬 초기화
-            Console.WriteLine("처음에 데리고 갈 포켓몬을 선택하세요:");
+            Console.Clear();
+            Console.WriteLine("오박사 : ");
+            Console.WriteLine("이제 네가 모험을 시작할 때 필요한 첫 번째 포켓몬을 골라보자.");
+            Console.WriteLine("여기 세 마리의 포켓몬이 있어. 그 중 하나를 선택할 수 있어. 잘 생각해봐!");
+            Console.WriteLine();
+            Console.WriteLine();
+     
             int index = 1;
 
             foreach (var pokemon in FirstPokemons)
             {
-                Console.WriteLine($"{index}. {pokemon.Key} (공격력: {pokemon.Value.attack}, 방어력: {pokemon.Value.defense})");
+                Console.WriteLine($"{index}. {pokemon.Key} | {pokemon.Value.description} | (공격력: {pokemon.Value.attack}, 방어력: {pokemon.Value.defense})");
                 index++;
             }
 
             // 입력 받기
+            Console.WriteLine();
+            Console.WriteLine("원하는 포켓몬 번호를 선택해");
+            Console.Write(">> ");
             int choice = CInput.CheckInput(1, FirstPokemons.Count);
             var chosenPokemonKey = FirstPokemons.Keys.ElementAt(choice - 1);
             var chosenPokemon = FirstPokemons[chosenPokemonKey];
@@ -49,7 +60,15 @@ namespace PokemonT
                     inventory.shopItems.Add(pokemon.Key, pokemon.Value);
                 }
             }
-            Console.WriteLine($"{chosenPokemonKey}을(를) 선택했습니다!");
+            Console.Clear();
+            Console.WriteLine("오박사 : ");
+            Console.WriteLine($"{chosenPokemonKey}를 선택했구나. 아주 멋진 선택이야!");
+            Console.WriteLine($"이제 진정한 모험이 시작될 시간이야. 준비됐니? ");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("아무 버튼이나 입력하여 모험 시작");
+            Console.ReadKey();
+            
         }  
 
     }

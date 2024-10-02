@@ -28,21 +28,22 @@ namespace PokemonT
         public void DisplayStatusUI(Character player) // 상태보기 UI - 메인 씬 중복 내용 추후 삭제
         {
             Console.Clear();
-            Console.WriteLine("포켓몬스터 T");
-            Console.WriteLine("상태보기");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("<<상태보기>>");
+            Console.WriteLine();
             player.DisplayCharacterStatus();
 
             Console.WriteLine("장착한 포켓몬");
+            Console.WriteLine();
             // DisplayEquippedItem() 호출
             Console.WriteLine();
-            Console.WriteLine();
             Console.WriteLine("퀘스트 달성 현황");
-
-
+            // 퀘스트 현황 호출
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("0을 눌러 메인 화면으로 이동하기");
-            Console.Write(">>");
+            Console.Write(">> ");
 
             int result = CInput.CheckInput(0, 0);
 
