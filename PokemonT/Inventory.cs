@@ -20,8 +20,7 @@ namespace PokemonT
         public void DisplayInventoryUI(Character player)
         {
 
-            shopItems = InitializeShopItems();
-            inventory = InitializeInventory();
+          
 
             Console.Clear();
             Console.WriteLine("\n=== 게임 ===");
@@ -38,7 +37,7 @@ namespace PokemonT
 
                 if (choice == 1)
                 {
-                    shop.MainShop(player.PlayerGold, inventory, shopItems);
+                   // shop.MainShop(player.PlayerGold, inventory, shopItems);
                 }
                 else if (choice == 2)
                 {
