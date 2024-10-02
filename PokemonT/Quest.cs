@@ -401,7 +401,7 @@ namespace PokemonT
                 }
                 if (returnValues.returnValueItem != null)
                 {
-                    inventory.inventory.Add(returnValues.returnValueItem, (inventory.inventory.Count + 1, false ,returnValues.returnValueItemAttack , returnValues.returnValueItemDefence ));
+                    inventory.inventory.Add(returnValues.returnValueItem, (1, false ,returnValues.returnValueItemAttack , returnValues.returnValueItemDefence ));
                 }
                 allQuestList[i].QuestIsClear = returnValues.returnValueClear;
             }
