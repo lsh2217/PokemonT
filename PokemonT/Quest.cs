@@ -12,6 +12,8 @@ namespace PokemonT
         public string returnValueItem;
         public int returnValueGold;
         public bool returnValueClear;
+        public int returnValueItemAttack;
+        public int returnValueItemDefence;
     };
     public class Quest
     {
@@ -33,10 +35,17 @@ namespace PokemonT
         bool isEquipQuest = false;
         bool retry = false;
 
-        public void DisplayQuestUI(MainScene displayMainUI, Character character)
+        Dictionary<string, (string description, int attack, int defense, Inventory.ItemType type)> rewardPoketmon = new Dictionary<string, (string, int, int, Inventory.ItemType)>
+        {
+            { "캐터피", ("입에서 끈적한 실을 내뿜는 애벌레 모습의 풀 타입포켓몬입니다.", 2, 2, Inventory.ItemType.Equipment)},
+            { "고오스", ("옅은 가스 같은 몸을 하고있는 고스트 타입 포켓몬입니다.", 10, 10, Inventory.ItemType.Equipment) }
+        };
+
+        public void DisplayQuestUI(MainScene displayMainUI, Character character, Inventory inv)
         {
             mainScene = displayMainUI;
             player = character;
+            inventory = inv;
             Console.Clear();
             questListNumber = 0;
             Console.WriteLine("수락 가능한 임무 목록");
@@ -96,8 +105,8 @@ namespace PokemonT
 
             questValue.Add(new QuestInformation(0, "포켓몬 구매하기", 0, "상점에서 포켓몬 1마리를 구매하세요.", 1000, null, false));
             questValue.Add(new QuestInformation(1, "Gold 사용하기", 0, "500Gold를 소모하세요", 1000, null, false));
-            questValue.Add(new QuestInformation(2, "포켓몬 전투에서 승리", 0, "전투에서 상대 아무포켓몬 2마리를 전투불능으로 만드세요", 0, "수상한 알(노말)", false));
-            questValue.Add(new QuestInformation(3, "포켓몬 전투에서 대승리", 1, "전투에서 상대 아무포켓몬 8마리를 전투불능으로 만드세요", 1500, "수상한 알(악)", false));
+            questValue.Add(new QuestInformation(2, "포켓몬 전투에서 승리", 0, "전투에서 상대 아무포켓몬 2마리를 전투불능으로 만드세요", 0, "캐터피", false));
+            questValue.Add(new QuestInformation(3, "포켓몬 전투에서 대승리", 1, "전투에서 상대 아무포켓몬 8마리를 전투불능으로 만드세요", 1500, "고오스", false));
             //questValue.Add(new QuestInformation(4, "진화의 돌 사용", 1, "아무포켓몬에게 진화의 돌을 사용하여 진화시켜 보세요", 0, 2, "진화의 돌"));
 
 
@@ -116,7 +125,7 @@ namespace PokemonT
             acceptQuestList.Add(allQuestList[i].QuestId);
             retry = false;
             acceptQuestListNumber++;
-            DisplayQuestUI(mainScene, player);
+            DisplayQuestUI(mainScene, player, inventory);
         }
 
         public void tossQuestInformation_0()
@@ -163,6 +172,8 @@ namespace PokemonT
                 returnValues.returnValueItem = allQuestList[0].QuestItem;
                 returnValues.returnValueGold = allQuestList[0].QuestGold;
                 returnValues.returnValueClear = true;
+                returnValues.returnValueItemAttack = allQuestList[0].QuestItemAttack;
+                returnValues.returnValueItemDefence = allQuestList[0].QuestItemDefence;
                 return returnValues;
             }
             else
@@ -170,6 +181,8 @@ namespace PokemonT
                 returnValues.returnValueItem = null;
                 returnValues.returnValueGold = 0;
                 returnValues.returnValueClear = false;
+                returnValues.returnValueItemAttack = 0;
+                returnValues.returnValueItemDefence = 0;
                 return returnValues;
             }
         }
@@ -180,6 +193,8 @@ namespace PokemonT
             {
                 returnValues.returnValueItem = allQuestList[1].QuestItem;
                 returnValues.returnValueGold = allQuestList[1].QuestGold;
+                returnValues.returnValueItemAttack = allQuestList[1].QuestItemAttack;
+                returnValues.returnValueItemDefence = allQuestList[1].QuestItemDefence;
                 returnValues.returnValueClear = true;
                 return returnValues;
 
@@ -196,6 +211,8 @@ namespace PokemonT
             {
                 returnValues.returnValueItem = allQuestList[2].QuestItem;
                 returnValues.returnValueGold = allQuestList[2].QuestGold;
+                returnValues.returnValueItemAttack = allQuestList[2].QuestItemAttack;
+                returnValues.returnValueItemDefence = allQuestList[2].QuestItemDefence;
                 returnValues.returnValueClear = true;
                 return returnValues;
 
@@ -203,6 +220,8 @@ namespace PokemonT
             returnValues.returnValueItem = null;
             returnValues.returnValueGold = 0;
             returnValues.returnValueClear = false;
+            returnValues.returnValueItemAttack = 0;
+            returnValues.returnValueItemDefence = 0;
             return returnValues;
         }
 
@@ -213,6 +232,8 @@ namespace PokemonT
             {
                 returnValues.returnValueItem = allQuestList[3].QuestItem;
                 returnValues.returnValueGold = allQuestList[3].QuestGold;
+                returnValues.returnValueItemAttack = allQuestList[3].QuestItemAttack;
+                returnValues.returnValueItemDefence = allQuestList[3].QuestItemDefence;
                 returnValues.returnValueClear = true;
                 return returnValues;
 
@@ -220,6 +241,8 @@ namespace PokemonT
             returnValues.returnValueItem = null;
             returnValues.returnValueGold = 0;
             returnValues.returnValueClear = false;
+            returnValues.returnValueItemAttack = 0;
+            returnValues.returnValueItemDefence = 0;
             return returnValues;
         }
 
@@ -315,7 +338,7 @@ namespace PokemonT
             else if (playerChoose == 2)
             {
                 retry = false;
-                DisplayQuestUI(mainScene, player);
+                DisplayQuestUI(mainScene, player, inventory);
             }
             else
             {
@@ -378,18 +401,18 @@ namespace PokemonT
                 }
                 if (returnValues.returnValueItem != null)
                 {
-                    inventory.inventory.Add(returnValues.returnValueItem, (inventory.inventory.Count + 1, true));
+                    inventory.inventory.Add(returnValues.returnValueItem, (inventory.inventory.Count + 1, false ,returnValues.returnValueItemAttack , returnValues.returnValueItemDefence ));
                 }
                 allQuestList[i].QuestIsClear = returnValues.returnValueClear;
             }
             else if (playerChoose == 2)
             {
-                DisplayQuestUI(mainScene, player);
+                DisplayQuestUI(mainScene, player, inventory);
             }
             else
             {
             }
-            DisplayQuestUI(mainScene, player);
+            DisplayQuestUI(mainScene, player, inventory);
         }
     }
 
@@ -405,6 +428,8 @@ namespace PokemonT
         public int QuestGold { get; set; }
         public string QuestItem { get; set; }
         public bool QuestIsClear { get; set; }
+        public int QuestItemAttack { get; set; }
+        public int QuestItemDefence { get; set; }
 
 
         public QuestInformation(int id, string name, int level, string manual, int gold, string item, bool clear)
@@ -416,9 +441,13 @@ namespace PokemonT
             QuestGold = gold;
             QuestItem = item;
             QuestIsClear = false;
+            QuestItemAttack = 0;
+            QuestItemDefence = 0;
 
         }
 
     }
+
+    
 
 }
