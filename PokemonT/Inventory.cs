@@ -54,9 +54,6 @@ namespace PokemonT
         {
             return new Dictionary<string, (string description, int attack, int defense, ItemType type)>
             {
-                //{ "파이리", ("불을 내뿜는 포켓몬입니다.", 10, 5, ItemType.Equipment) },
-                //{ "꼬북이", ("물속에서 사는 포켓몬입니다.", 5, 7, ItemType.Equipment) },
-                //{ "이상해씨", ("꽃을 등에 지고 있는 포켓몬입니다.", 7, 6, ItemType.Equipment) },
                 { "리자드", ("날카로운 발톱을 가진 포켓몬입니다.", 12, 6, ItemType.Equipment) },
                 { "어니북이", ("단단한 껍질을 가진 포켓몬입니다.", 6, 8, ItemType.Equipment) },
                 { "이상해풀", ("큰 꽃을 가진 진화된 포켓몬입니다.", 14, 8, ItemType.Equipment) },

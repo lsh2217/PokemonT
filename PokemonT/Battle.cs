@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using static PokemonT.Inventory;
 
 namespace PokemonT
 {
@@ -46,15 +48,16 @@ namespace PokemonT
 
             foreach (Monster monster in PlayerMonsterManager.Monsters)
             {
-                PlayerMonster.Add(monster);
+                //PlayerMonster.Add(monster);
             }
         }
 
-        public void DisPlayBattelUI(MainScene displayMainUI, Quest questInformation, Character player)
+        public void DisPlayBattelUI(MainScene displayMainUI, Quest questInformation, Character player, Inventory inventory)
         {
             mainScene = displayMainUI;
             playerBattle = player;
             quest = questInformation;
+            inven = inventory;
             Console.Clear();
             Console.WriteLine("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
             for (int i = 0; i < 5; i++)
@@ -96,7 +99,7 @@ namespace PokemonT
 
                 default:
                     InputFail();
-                    DisPlayBattelUI(displayMainUI, quest, playerBattle);
+                    DisPlayBattelUI(displayMainUI, quest, playerBattle, inven);
                     break;
             }
         }
@@ -109,6 +112,7 @@ namespace PokemonT
             if (BatterStert == false)
             {
                 StageEnumy(DungeonManager.Dungeons[stage - 1].Monstercount); // 몬스터 생성
+
                 int recount = 0;
                 for (int i = 0; i < PlayerMonster.Count; i++)
                 {
@@ -120,7 +124,7 @@ namespace PokemonT
                     Thread.Sleep(1000);
                     Console.WriteLine("아무 키나 누르세요.");
                     ResetData();
-                    DisPlayBattelUI(mainScene, quest, playerBattle);
+                    DisPlayBattelUI(mainScene, quest, playerBattle, inven);
                 }
                 else recount = 0;
             }
@@ -232,6 +236,14 @@ namespace PokemonT
                 int rand = list[new Random().Next(list.Count)];
                 StageMonster[i] = new MonsterManager().Monsters[rand];
                 list.Remove(rand);
+            }
+        }
+        public void StagePlayer()
+        {
+            
+            foreach (var item in inven.shopItems)
+            {
+                
             }
         }
         public void PlayerAttack()
@@ -400,7 +412,7 @@ namespace PokemonT
             quest.tossQuestInformation_3(DeathCount(StageMonster));
             PlayerAction();
             ResetData();
-            this.DisPlayBattelUI(mainScene, quest, playerBattle);
+            this.DisPlayBattelUI(mainScene, quest, playerBattle, inven);
         }
         public void StageFail()
         {

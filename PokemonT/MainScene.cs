@@ -71,7 +71,7 @@ namespace PokemonT
                     quest.DisplayQuestUI(this , player);
                     break;
                 case 5:
-                    Battle.DisPlayBattelUI(this, quest, player);
+                    Battle.DisPlayBattelUI(this, quest, player, inventory);
                     break;
             }
         }
