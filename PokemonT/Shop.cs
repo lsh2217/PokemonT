@@ -13,7 +13,7 @@ namespace PokemonT
         MainScene mainScene;
         Quest quest;
         Input CInput = new Input();
-        public void MainShop(MainScene displayMainUI, Quest questInfomation, int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void MainShop(MainScene displayMainUI, Quest questInfomation, int gold, Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             quest = questInfomation;
             mainScene = displayMainUI;
@@ -54,7 +54,7 @@ namespace PokemonT
             }
         }
 
-        public void PurchaseItem(ref int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void PurchaseItem(ref int gold, Dictionary<string, (int count, bool isEquipped, int attack , int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             Console.Clear();
             Console.WriteLine("\n구매할 아이템을 선택하세요:");
@@ -95,7 +95,7 @@ namespace PokemonT
                     else
                     {
                         gold -= price;
-                        inventory.Add(selectedItem, (1, false));
+                        inventory.Add(selectedItem, (1, false, shopItems[selectedItem].attack , shopItems[selectedItem].defense));
                         quest.tossQuestInformation_0();
                         quest.tossQuestInformation_1(price);
                     }
@@ -112,7 +112,7 @@ namespace PokemonT
             }
         }
 
-        public void SellItem(int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void SellItem(int gold, Dictionary<string, (int count, bool isEquipped, int attack , int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             Console.Clear();
             Console.WriteLine("\n판매할 아이템을 선택하세요:");
@@ -142,7 +142,7 @@ namespace PokemonT
                     }
                     else
                     {
-                        inventory[selectedItem] = (itemCount - 1, inventory[selectedItem].isEquipped);
+                        inventory[selectedItem] = (itemCount - 1, inventory[selectedItem].isEquipped , inventory[selectedItem].attack , inventory[selectedItem].defence);
                     }
                     Console.WriteLine($"{selectedItem}을(를) 판매했습니다.");
                 }

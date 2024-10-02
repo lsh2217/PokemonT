@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,7 +50,7 @@ namespace PokemonT
             var chosenPokemon = FirstPokemons[chosenPokemonKey];
 
             // 선택한 포켓몬을 인벤토리에 추가
-            inventory.inventory.Add(chosenPokemonKey, (1, true));
+            inventory.inventory.Add(chosenPokemonKey, (1, true, FirstPokemons[chosenPokemonKey].attack, FirstPokemons[chosenPokemonKey].defense));
 
 
             // 선택하지 않은 포켓몬들을 상점 아이템(InitializeShopItems)에 넣음

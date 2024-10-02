@@ -9,7 +9,7 @@ namespace PokemonT
         Shop shop = new Shop();   
         Input CInput = new Input();
         public Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems;
-        public Dictionary<string, (int count, bool isEquipped)> inventory= new Dictionary<string, (int, bool)>();
+        public Dictionary<string, (int count, bool isEquipped , int attack, int defence )> inventory= new Dictionary<string, (int, bool,int,int)>();
         MainScene mainScene;
 
         public Inventory()
@@ -69,7 +69,7 @@ namespace PokemonT
             };
         }
 
-        public void ShowInventory(ref Dictionary<string, (int count, bool isEquipped)> inventory)
+        public void ShowInventory(ref Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory)
         {
             Console.Clear();
             Console.WriteLine("\n=== 가방 ===");
@@ -88,7 +88,7 @@ namespace PokemonT
             EquipItem(ref inventory); // 장비 아이템 장착 기능 추가
         }
 
-        public void EquipItem(ref Dictionary<string, (int count, bool isEquipped)> inventory)
+        public void EquipItem(ref Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory)
         {
             Console.WriteLine("\n장착할 장비 아이템을 선택하세요:");
             List<string> equipableItems = new List<string>();
@@ -112,7 +112,7 @@ namespace PokemonT
             if (itemIndex > 0 && itemIndex <= equipableItems.Count)
             {
                 var selectedItem = equipableItems[itemIndex - 1];
-                inventory[selectedItem] = (inventory[selectedItem].count, true);
+                inventory[selectedItem] = (inventory[selectedItem].count, true, inventory[selectedItem].attack, inventory[selectedItem].defence);
                 Console.WriteLine($"{selectedItem}을(를) 장착했습니다.");
             }
             else
