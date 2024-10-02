@@ -250,7 +250,7 @@ namespace PokemonT
                     {
                         bool success = PerformAttack(PlayerMonster[PlayerTurnNum - 1], StageMonster[MonsterSelect - 1],
                                             ref PlayerTurnNum, DungeonManager.Dungeons[CurrentStage - 1].Monstercount,
-                                            id => MonsterDieID[MCount++] = id);
+                                            id => MonsterDieID[MCount++] = id, true);
 
                         if (!success)
                         {
@@ -285,7 +285,7 @@ namespace PokemonT
                 {
                     bool success = PerformAttack(StageMonster[MonsterTurnNum - 1], PlayerMonster[MonsterSelect - 1],
                                         ref MonsterTurnNum, DungeonManager.Dungeons[CurrentStage - 1].Monstercount,
-                                        id => PlayerDieID[PCount++] = id);
+                                        id => PlayerDieID[PCount++] = id, false);
 
                     if (!success)
                     {
@@ -306,12 +306,15 @@ namespace PokemonT
 
             Fight(CurrentStage);
         }
-        private bool PerformAttack(Monster attacker, Monster defender, ref int attackerTurnNum, int maxTurnNum, Action<string> onDeath)
+        private bool PerformAttack(Monster attacker, Monster defender, ref int attackerTurnNum, int maxTurnNum, Action<string> onDeath, bool isPlayer)
         {
             // 이미 죽은 몬스터를 공격할 수 없도록 처리
             if (defender.Die)
             {
-                Console.WriteLine($"{defender.Name}은(는) 이미 죽었습니다! 다른 몬스터를 선택하세요.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{defender.Name}");
+                Console.WriteLine("은(는) 기절했습니다! 다른 몬스터를 선택하세요.");
+                Console.ResetColor();
                 return false; // 공격 실패, 턴 유지
             }
 
@@ -327,17 +330,33 @@ namespace PokemonT
                 if (dodgeChance <= 20)
                 {
                     Thread.Sleep(1000);
-                    Console.WriteLine($"{defender.Name}이(가) 공격을 회피했습니다!");
-                    Thread.Sleep(1000);
+                    if(isPlayer)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"{defender.Name}");
+                    Console.ResetColor();
+                    Console.WriteLine("이(가) 공격을 회피했습니다!");
+                    Thread.Sleep(1500);
                 }
                 else
                 {
                     // 크리티컬 처리 (20% 확률)
-                    if (critChance <= 100)
+                    if (critChance <= 50)
                     {
                         attackDamage *= 2;
                         Thread.Sleep(1000);
-                        Console.WriteLine($"{attacker.Name}이(가) 크리티컬 공격! 공격력이 2배로 증가했습니다!");
+                        if (isPlayer)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        }
+                        else Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write($"{attacker.Name}");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("이(가) 크리티컬 공격!");
+                        Console.ResetColor();
                         Thread.Sleep(1000);
                     }
 
@@ -345,8 +364,15 @@ namespace PokemonT
                     defender.Hp -= attackDamage;
                     if (defender.Hp <= 0) defender.Hp = 0;
                     Thread.Sleep(1000);
-                    Console.WriteLine($"{defender.Name}이(가) {attackDamage}의 피해를 입었습니다. 남은 HP: {defender.Hp}");
-                    Thread.Sleep(1000);
+                    if (isPlayer)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"{defender.Name}");
+                    Console.ResetColor();
+                    Console.WriteLine($"이(가) {attackDamage}의 피해를 입었습니다. 남은 HP: {defender.Hp}");
+                    Thread.Sleep(2000);
                     // 사망 처리
                     if (defender.Hp <= 0)
                     {

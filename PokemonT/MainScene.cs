@@ -62,7 +62,7 @@ namespace PokemonT
                     statusScene.DisplayStatusUI(player);
                     break;
                 case 2:
-                    inventory.DisplayInventoryUI(player);
+                    inventory.DisplayInventoryUI(player, this);
                     break;
                 case 3:
                     shop.MainShop(this, quest,  player.PlayerGold, inventory.inventory , inventory.shopItems);
