@@ -26,19 +26,19 @@ namespace PokemonT
                         
             // 세 포켓몬 초기화
             Console.Clear();
-            Console.WriteLine("오박사 : ");
+            StartAnimation.Professor();
             Console.WriteLine("이제 네가 모험을 시작할 때 필요한 첫 번째 포켓몬을 골라보자.");
             Console.WriteLine("여기 세 마리의 포켓몬이 있어. 그 중 하나를 선택할 수 있어. 잘 생각해봐!");
             Console.WriteLine();
             Console.WriteLine();
-     
-            int index = 1;
 
+            int index = 1;
             foreach (var pokemon in FirstPokemons)
             {
                 Console.WriteLine($"{index}. {pokemon.Key} | {pokemon.Value.description} | (공격력: {pokemon.Value.attack}, 방어력: {pokemon.Value.defense})");
                 index++;
             }
+            
 
             // 입력 받기
             Console.WriteLine();
@@ -61,12 +61,28 @@ namespace PokemonT
                 }
             }
             Console.Clear();
-            Console.WriteLine("오박사 : ");
+            StartAnimation.Professor();
             Console.WriteLine($"{chosenPokemonKey}를 선택했구나. 아주 멋진 선택이야!");
+           
+            // 선택한 포켓몬 ASCII 아트
+            switch (chosenPokemonKey)
+            {
+                case "이상해씨":
+                    StartAnimation.AsciiBulbasaur();
+                    break;
+                case "파이리":
+                    StartAnimation.AsciiCharmander();
+                    break;
+                case "꼬부기":
+                    StartAnimation.AsciiSquirtle();
+                    break;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine($"이제 진정한 모험이 시작될 시간이야. 준비됐니? ");
             Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("아무 버튼이나 입력하여 모험 시작");
+            Console.WriteLine(">> 아무 버튼이나 입력하여 모험 시작");
             Console.ReadKey();
             
         }  

@@ -13,7 +13,7 @@ namespace PokemonT
         public string SelectJob()
         {
             Console.Clear();
-            Console.WriteLine("오박사 : ");
+            StartAnimation.Professor();
             Console.WriteLine("포켓몬 세계에서 새로운 모험이 곧 시작될 거야.");
             Console.WriteLine("그런데, 너는 어떤 일을 하며 살아갈지 정해야 해. 너는 어떤 직업을 선택할 거야?");
             Console.WriteLine();
@@ -49,7 +49,7 @@ namespace PokemonT
 
 
             Console.Clear();
-            Console.WriteLine("오박사 : ");
+            StartAnimation.Professor();
             Console.WriteLine($"{playerJob}, 좋은 선택이야!");
             Console.WriteLine();
             Console.WriteLine();

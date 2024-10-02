@@ -38,9 +38,6 @@ namespace PokemonT
             Console.WriteLine();
             // DisplayEquippedItem() 호출
             Console.WriteLine();
-            Console.WriteLine("퀘스트 달성 현황");
-            // 퀘스트 현황 호출
-            Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("0을 눌러 메인 화면으로 이동하기");
             Console.Write(">> ");

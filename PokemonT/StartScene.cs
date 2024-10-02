@@ -24,7 +24,8 @@ namespace PokemonT
             StartAnimation.PrintLogo();
 
             // 시작 대사
-            Console.WriteLine("오박사 : ");
+            Console.Clear();
+            StartAnimation.Professor();
             Console.WriteLine("안녕! 포켓몬의 세계에 온 걸 환영해!");
             Console.WriteLine("나는 이 세상에서 '포켓몬'이라 불리는 생명체들을 연구하는 교수를 맡고 있어.");
             Console.WriteLine();
@@ -36,7 +37,7 @@ namespace PokemonT
             string name = Console.ReadLine();
 
             Console.Clear();
-            Console.WriteLine("오박사 : ");
+            StartAnimation.Professor();
             Console.WriteLine($"{name}, 멋진 이름이구나.");
             Console.WriteLine();
             Console.WriteLine();
