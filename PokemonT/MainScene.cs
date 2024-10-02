@@ -38,7 +38,7 @@ namespace PokemonT
         {
             
             Console.Clear();
-            Console.WriteLine("포켓몬스터 T");
+            
             Console.WriteLine("메인 화면");
             Console.WriteLine();
             Console.WriteLine();
@@ -62,7 +62,7 @@ namespace PokemonT
                     statusScene.DisplayStatusUI(player);
                     break;
                 case 2:
-                    inventory.DisplayInventoryUI(player);
+                    inventory.DisplayInventoryUI(player, this);
                     break;
                 case 3:
                     shop.MainShop(this, quest,  player.PlayerGold, inventory.inventory , inventory.shopItems);
@@ -71,131 +71,7 @@ namespace PokemonT
                     quest.DisplayQuestUI(this , player);
                     break;
                 case 5:
-                    Battle.DisPlayBattelUI(this , quest);
-                    break;
-            }
-        }
-
-        public void DisplayStatsUI() // 상태보기 UI
-        {
-            Console.Clear();
-            Console.WriteLine("포켓몬스터 T");
-            Console.WriteLine("상태보기");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("이름" + player.PlayerName);
-            Console.WriteLine("스탯");
-            Console.WriteLine("장착한 포켓몬");
-            Console.WriteLine("퀘스트 달성 현황");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("0을 눌러 메인 화면으로 이동하기");
-            Console.Write(">> ");
-
-            int result = CInput.CheckInput(0,0);
-
-            switch (result)
-            {
-
-                case 0:
-                    DisplayMainUI();
-                    break;
-            }
-        }
-
-        public void DisplayInventoryUI() // 인벤토리 UI
-        {
-            Console.Clear();
-            Console.WriteLine("포켓몬스터 T");
-            Console.WriteLine("인벤토리");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("숫자를 눌러 원하는 행동하기");
-            Console.Write(">> ");
-
-            int result = CInput.CheckInput(0, 0);
-
-            switch (result)
-            {
-
-                case 0:
-                    DisplayMainUI();
-                    break;
-            }
-        }
-
-        public void DisplayStoreUI() // 상점 UI
-        {
-            Console.Clear();
-            Console.WriteLine("포켓몬스터 T");
-            Console.WriteLine("상점");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("숫자를 눌러 원하는 행동하기");
-            Console.Write(">> ");
-
-            int result = CInput.CheckInput(0, 0);
-
-            switch (result)
-            {
-
-                case 0:
-                    DisplayMainUI();
-                    break;
-            }
-        }
-
-        /*public void DisplayQuestUI() // 퀘스트 페이지 UI
-        {
-            Console.Clear();
-            Console.WriteLine("포켓몬스터 T");
-            Console.WriteLine("퀘스트");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("숫자를 눌러 원하는 행동하기");
-            Console.Write(">> ");
-
-            int result = CheckInput(0, 0);
-
-            switch (result)
-            {
-
-                case 0:
-                    DisplayMainUI();
-                    break;
-            }
-        }*/
-
-        public void DisplayBattleUI() // 전투 화면 UI
-        {
-            Console.Clear();
-            Console.WriteLine("포켓몬스터 T");
-            Console.WriteLine("전투");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("1. 스테이지 선택하기");
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("숫자를 눌러 원하는 행동하기");
-            Console.Write(">> ");
-
-            int result = CInput.CheckInput(0, 0);
-
-            switch (result)
-            {
-
-                case 0:
-                    DisplayMainUI();
+                    Battle.DisPlayBattelUI(this, quest, player);
                     break;
             }
         }

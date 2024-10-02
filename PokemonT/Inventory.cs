@@ -9,49 +9,39 @@ namespace PokemonT
         Shop shop = new Shop();   
         Input CInput = new Input();
         public Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems;
-        public Dictionary<string, (int count, bool isEquipped)> inventory = new Dictionary<string, (int count, bool isEquipped)>();
+        public Dictionary<string, (int count, bool isEquipped)> inventory= new Dictionary<string, (int, bool)>();
+        MainScene mainScene;
 
         public Inventory()
         {
             shopItems = InitializeShopItems(); // 상점 아이템 초기화
-            
         }
 
-        public void DisplayInventoryUI(Character player)
+        public void DisplayInventoryUI(Character player, MainScene main)
         {
 
-          
+            mainScene = main;
 
             Console.Clear();
             Console.WriteLine("\n=== 게임 ===");
-            Console.WriteLine("1. 상점에 가기");
-            Console.WriteLine("2. 가방 보기");
+            Console.WriteLine("1. 가방 보기");
             Console.WriteLine("0. 종료");
             Console.Write("원하시는 행동을 입력해주세요: ");
             
-
+            int choice = CInput.CheckInput(0, 1);
             
-
-                int choice = CInput.CheckInput(0, 2);
-                //string choice = Console.ReadLine();
-
-                if (choice == 1)
-                {
-                   // shop.MainShop(player.PlayerGold, inventory, shopItems);
-                }
-                else if (choice == 2)
-                {
-                    ShowInventory(ref inventory);
-                }
-                else if (choice == 0)
-                {
-                    Console.WriteLine("게임을 종료합니다.");
-                    
-                }
-                else
-                {
-                    Console.WriteLine("잘못된 입력입니다.");
-                }
+            if (choice == 1)
+            {
+                ShowInventory(ref inventory);
+            }
+            else if (choice == 0)
+            {
+                mainScene.DisplayMainUI();
+            }
+            else
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
             
         }
 
@@ -82,7 +72,6 @@ namespace PokemonT
             };
         }
 
-        
         public void ShowInventory(ref Dictionary<string, (int count, bool isEquipped)> inventory)
         {
             Console.Clear();
@@ -119,9 +108,9 @@ namespace PokemonT
             Console.WriteLine("0. 나가기");
 
             //string choice = Console.ReadLine();
-            int itemIndex = CInput.CheckInput(0, 2);
+            int itemIndex = CInput.CheckInput(0, inventory.Count);
             int choice = itemIndex;
-            if (choice == 0) return;
+            if (choice == 0) mainScene.DisplayMainUI();
 
             if (itemIndex > 0 && itemIndex <= equipableItems.Count)
             {
@@ -132,6 +121,7 @@ namespace PokemonT
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
+               // EquipItem(ref inventory);
             }
         }
 
