@@ -41,7 +41,7 @@ namespace PokemonT
             Console.WriteLine($"{name}, 멋진 이름이구나.");
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("아무 키나 눌러 넘어가기");
+            Console.Write("아무 키나 눌러 넘어가기");
             Console.ReadKey();
 
             // 2. 플레이어 초기 스탯 설정

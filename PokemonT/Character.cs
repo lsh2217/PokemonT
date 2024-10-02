@@ -51,14 +51,11 @@ namespace PokemonT
         // 스테이터스 - 캐릭터 스탯 표시 함수
         public void DisplayCharacterStatus() 
         {
-            Console.WriteLine($"- 이름 {PlayerName} ({PlayerJob})" );
-            Console.WriteLine();
+            Console.WriteLine($"- 이름 : {PlayerName} ({PlayerJob})" );
             Console.WriteLine(ExtraAtk == 0 ? $"- 공격력 : {PlayerAtk}" : $"- 공격력 : {PlayerAtk} (+{ExtraAtk})");
-            Console.WriteLine();
             //Console.WriteLine(ExtraAtk == 0 ? $"- 방어력 : {PlayerDef}" : $"- 방어력 : {PlayerDef} (+{ExtraDef})");
-            Console.WriteLine($"- 체력 {PlayerHp}");
-            Console.WriteLine();
-            Console.WriteLine($"- 골드 {PlayerGold} G");
+            Console.WriteLine($"- 체력 : {PlayerHp}");
+            Console.WriteLine($"- 골드 : {PlayerGold} G");
         } 
 
     }
