@@ -9,12 +9,12 @@ namespace PokemonT
         Shop shop = new Shop();   
         Input CInput = new Input();
         public Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems;
-        public Dictionary<string, (int count, bool isEquipped)> inventory;
+        public Dictionary<string, (int count, bool isEquipped)> inventory = new Dictionary<string, (int count, bool isEquipped)>();
 
         public Inventory()
         {
             shopItems = InitializeShopItems(); // 상점 아이템 초기화
-            inventory = InitializeInventory();   // 인벤토리 초기화
+            
         }
 
         public void DisplayInventoryUI(Character player)
@@ -82,14 +82,7 @@ namespace PokemonT
             };
         }
 
-        public Dictionary<string, (int count, bool isEquipped)> InitializeInventory()
-        {
-            return new Dictionary<string, (int, bool)>
-            {
-                { "파이리", (1, false) }
-            };
-        }
-
+        
         public void ShowInventory(ref Dictionary<string, (int count, bool isEquipped)> inventory)
         {
             Console.Clear();
