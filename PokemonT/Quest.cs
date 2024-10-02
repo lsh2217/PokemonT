@@ -19,22 +19,26 @@ namespace PokemonT
         ReturnValues returnValues = new ReturnValues();
         List<int> acceptQuestList = new List<int>();
         Dictionary<int, QuestInformation> allQuestList = new Dictionary<int, QuestInformation>();
+        Character player;
+        Battle battle;
+        Inventory inventory;
 
         int charLevel = 5; // ##지워야 할 부분 , 레벨값을 스탯에서 받아야 할 부분
         int acceptQuestListNumber;
         int questListNumber;
         int playerChoose;
-        int allMonsterDeathCount;
-        int lizzardDeathCount;
+        int monsterDeathCountQ2;
+        int monsterDeathCountQ3;
         int useGoldAmount;
-        bool isEquip = false;
+        bool isEquipQuest = false;
         string chooseMent = "원하시는 행동을 입력해주세요";
         string retryMent = "다시 선택해주세요";
         bool retry = false;
 
-        public void DisplayQuestUI() {
+        public void DisplayQuestUI(MainScene displayMainUI) {
+            mainScene = displayMainUI;
             do {
-
+                
                 Console.Clear();
                 questListNumber = 0;
                 Console.WriteLine("수락 가능한 임무 목록");
@@ -85,7 +89,7 @@ namespace PokemonT
                     }
                     else if (playerChoose == 0)
                     {
-                        return;
+                    mainScene.DisplayMainUI();
                     }
                     else if ((playerChoose - 1) < questListNumber && playerChoose > 0
                         && playerChoose != 0 && acceptQuestList.Contains(allQuestList[playerChoose - 1].QuestId))
@@ -120,8 +124,8 @@ namespace PokemonT
 
             questValue.Add(new QuestInformation(0, "포켓몬 구매하기", 0, "상점에서 포켓몬 1마리를 구매하세요.", 1000, 0, null));
             questValue.Add(new QuestInformation(1, "Gold 사용하기", 0, "500Gold를 소모하세요", 1000, 0, null));
-            questValue.Add(new QuestInformation(2, "포켓몬 전투에서 승리", 0, "전투에서 상대 아무포켓몬 2마리를 전투불능으로 만드세요", 0, 1, "꼬렛"));
-            questValue.Add(new QuestInformation(3, "리자드 전투에서 승리", 1, "전투에서 상대 리자드를 전투불능으로 만드세요", 1500, 2, "고오스"));
+            questValue.Add(new QuestInformation(2, "포켓몬 전투에서 승리", 0, "전투에서 상대 아무포켓몬 2마리를 전투불능으로 만드세요", 0, 1, "수상한 알(노말)"));
+            questValue.Add(new QuestInformation(3, "포켓몬 전투에서 대승리", 1, "전투에서 상대 아무포켓몬 8마리를 전투불능으로 만드세요", 1500, 2, "수상한 알(악)"));
             //questValue.Add(new QuestInformation(4, "진화의 돌 사용", 1, "아무포켓몬에게 진화의 돌을 사용하여 진화시켜 보세요", 0, 2, "진화의 돌"));
             
 
@@ -140,14 +144,14 @@ namespace PokemonT
             acceptQuestList.Add(allQuestList[i].QuestId);
             retry = false;
             acceptQuestListNumber++;
-            DisplayQuestUI();
+            DisplayQuestUI(mainScene);
         }
 
-        public void tossQuestInformation_0(bool equip)
+        public void tossQuestInformation_0()
         {
             if (acceptQuestList.Contains(0))
             {
-                isEquip = equip;
+               isEquipQuest = true;
             }
 
         }
@@ -158,27 +162,19 @@ namespace PokemonT
                 useGoldAmount += useGold;
             }
         }
-        public void tossQuestInformation_2(int[] monsterId)
+        public void tossQuestInformation_2(int deathCount)
         {
             if (acceptQuestList.Contains(2))
             {
-                for (int i = 0; i < monsterId.Length; i++)
-                {
-                    allMonsterDeathCount++;
-                }
+                monsterDeathCountQ2 += deathCount;
             }
         }
-        public void tossQuestInformation_3(int[] monsterId)
+        public void tossQuestInformation_3(int deathCount)
         {
+            
             if (acceptQuestList.Contains(3))
             {
-                for (int i = 0; i < monsterId.Length; i++)
-                {
-                    if (monsterId[i] == 5)              // ## 리자드 id 값으로 수정필요
-                    {
-                        lizzardDeathCount++;
-                    }
-                }
+                monsterDeathCountQ3 += deathCount;
             }
         }
         public void tossQuestInformation_4()
@@ -190,10 +186,20 @@ namespace PokemonT
 
         public ReturnValues QuestCheck_0()
         {
-            returnValues.returnValueItem = null;
-            returnValues.returnValueGold = 0;
-            returnValues.returnValueClear = false;
-            return returnValues;
+            if (isEquipQuest == true)
+            {
+                returnValues.returnValueItem = allQuestList[0].QuestItem;
+                returnValues.returnValueGold = allQuestList[0].QuestGold;
+                returnValues.returnValueClear = true;
+                return returnValues;
+            }
+            else
+            {
+                returnValues.returnValueItem = null;
+                returnValues.returnValueGold = 0;
+                returnValues.returnValueClear = false;
+                return returnValues;
+            }
         }
 
         public ReturnValues QuestCheck_1()
@@ -214,7 +220,7 @@ namespace PokemonT
 
         public ReturnValues QuestCheck_2()
         {
-            if (allMonsterDeathCount >= 2)
+            if (monsterDeathCountQ2 >= 2)
             {
                     returnValues.returnValueItem = allQuestList[2].QuestItem;
                     returnValues.returnValueGold = allQuestList[2].QuestGold;
@@ -231,10 +237,10 @@ namespace PokemonT
         public ReturnValues QuestCheck_3()
         {
 
-            if (lizzardDeathCount >= 1)
+            if (monsterDeathCountQ3 >= 8)
             {
-                    returnValues.returnValueItem = allQuestList[4].QuestItem;
-                    returnValues.returnValueGold = allQuestList[4].QuestGold;
+                    returnValues.returnValueItem = allQuestList[3].QuestItem;
+                    returnValues.returnValueGold = allQuestList[3].QuestGold;
                     returnValues.returnValueClear = true;
                     return returnValues;
 
@@ -261,22 +267,37 @@ namespace PokemonT
             if (i == 0)
             {
                 QuestCheck_0();
-                Console.WriteLine($"[이상해씨 구매] : [/1]\n");
+                Console.WriteLine($"[구매한 포켓몬] : [/1]\n");
             }
             else if (i == 1)
             {
                 QuestCheck_1();
-                Console.WriteLine($"[Gold 사용] : [/500]\n");
+                Console.WriteLine($"[Gold 사용] : [{useGoldAmount}/500]\n");
             }
             else if (i == 2)
             {
                 QuestCheck_2();
-                Console.WriteLine($"[전투불능으로 만든 포켓몬] : [{allMonsterDeathCount}/2]\n");
+                if (monsterDeathCountQ2 >= 2)
+                {
+                    Console.WriteLine($"[전투불능으로 만든 포켓몬] : [2/2]\n");
+                }
+                else 
+                {
+                    Console.WriteLine($"[전투불능으로 만든 포켓몬] : [{monsterDeathCountQ2}/2]\n");
+                }
+                
             }
             else if (i == 3)
             {
                 QuestCheck_3();
-                Console.WriteLine($"[전투불능으로 만든 리자드] : [{lizzardDeathCount}/1]\n");
+                if (monsterDeathCountQ3 >= 8)
+                {
+                    Console.WriteLine($"[전투불능으로 만든 포켓몬] : [8/8]\n");
+                }
+                else
+                {
+                    Console.WriteLine($"[전투불능으로 만든 포켓몬] : [{monsterDeathCountQ3}/8]\n");
+                }
             }
             else if (i == 4)
             {
@@ -298,7 +319,7 @@ namespace PokemonT
                 if (allQuestList[i].QuestGold == 0 && allQuestList[i].QuestItemType != 0)
                 {
                     
-                    Console.WriteLine("  아이템 = " + allQuestList[i].QuestItem);
+                    Console.WriteLine("  포켓몬 = " + allQuestList[i].QuestItem);
                 }
                 else if (allQuestList[i].QuestGold != 0 && allQuestList[i].QuestItemType == 0)
                 {
@@ -306,7 +327,7 @@ namespace PokemonT
                 }
                 else if (allQuestList[i].QuestGold != 0 && allQuestList[i].QuestItemType != 0)
                 {
-                    Console.WriteLine("  Gold = " + allQuestList[i].QuestGold + "\n  아이템 = " + allQuestList[i].QuestItem);
+                    Console.WriteLine("  Gold = " + allQuestList[i].QuestGold + "\n  포켓몬 = " + allQuestList[i].QuestItem);
                 }
                 Console.WriteLine();
                 Console.WriteLine("1. 수락");
@@ -337,7 +358,7 @@ namespace PokemonT
                 else if (playerChoose == 2)
                 {
                     retry = false;
-                    DisplayQuestUI();
+                    DisplayQuestUI(mainScene);
                 }
                 else
                 {
@@ -361,7 +382,7 @@ namespace PokemonT
                 if (allQuestList[i].QuestGold == 0 && allQuestList[i].QuestItemType != 0)
                 {
 
-                    Console.WriteLine("  아이템 = " + allQuestList[i].QuestItem);
+                    Console.WriteLine("  포켓몬 = " + allQuestList[i].QuestItem);
                 }
                 else if (allQuestList[i].QuestGold != 0 && allQuestList[i].QuestItemType == 0)
                 {
@@ -369,7 +390,7 @@ namespace PokemonT
                 }
                 else if (allQuestList[i].QuestGold != 0 && allQuestList[i].QuestItemType != 0)
                 {
-                    Console.WriteLine("  Gold = " + allQuestList[i].QuestGold + "\n  아이템 = " + allQuestList[i].QuestItem);
+                    Console.WriteLine("  Gold = " + allQuestList[i].QuestGold + "\n  포켓몬 = " + allQuestList[i].QuestItem);
                 }
                 Console.WriteLine("\n[임무 진행도]");
                 QuestProgress(i);
@@ -403,12 +424,19 @@ namespace PokemonT
 
                 if (playerChoose == 1 && returnValues.returnValueClear)
                 {
-                    // ##보상받기 버튼 구현
+                    if (returnValues.returnValueGold != 0)
+                    {
+                        player.PlayerGold += returnValues.returnValueGold;
+                    }
+                    if (returnValues.returnValueItem != null)
+                    {
+                        inventory.inventory.Add(returnValues.returnValueItem, (inventory.inventory.Count + 1, true));
+                    }
                 }
                 else if (playerChoose == 2)
                 {
                     retry = false;
-                    DisplayQuestUI();
+                    DisplayQuestUI(mainScene);
                 }
                 else
                 {

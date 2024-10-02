@@ -24,7 +24,7 @@ namespace PokemonT
 
         MonsterManager MonsterManager = new MonsterManager(); // 몬스터 관리 클레스
         DungeonManager DungeonManager; // 스테이지 관리 클레스
-        Monster[] StageMonster = new Monster[6]; // 스테이지에 등장 할 몬스터
+        public Monster[] StageMonster = new Monster[6]; // 스테이지에 등장 할 몬스터
 
         MonsterManager PlayerMonsterManager = new MonsterManager(); // 임시 플레이어
         List<Monster> PlayerMonster = new List<Monster>(); // 임시 플레이어
@@ -32,6 +32,7 @@ namespace PokemonT
         MainScene mainScene;
         Inventory inven;
         Character playerBattle;
+        Quest quest;
 
         string[] MonsterDieID = new string[6];
         int MCount = 0;
@@ -49,10 +50,11 @@ namespace PokemonT
             }
         }
 
-        public void DisPlayBattelUI(MainScene displayMainUI, Character player)
+        public void DisPlayBattelUI(MainScene displayMainUI, Quest questInformation, Character player)
         {
             mainScene = displayMainUI;
             playerBattle = player;
+            quest = questInformation;
             Console.Clear();
             Console.WriteLine("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
             for (int i = 0; i < 5; i++)
@@ -94,7 +96,7 @@ namespace PokemonT
 
                 default:
                     InputFail();
-                    DisPlayBattelUI(displayMainUI, playerBattle);
+                    DisPlayBattelUI(displayMainUI, quest, playerBattle);
                     break;
             }
         }
@@ -118,7 +120,7 @@ namespace PokemonT
                     Thread.Sleep(1000);
                     Console.WriteLine("아무 키나 누르세요.");
                     ResetData();
-                    DisPlayBattelUI(mainScene,playerBattle);
+                    DisPlayBattelUI(mainScene, quest, playerBattle);
                 }
                 else recount = 0;
             }
@@ -208,7 +210,7 @@ namespace PokemonT
             for (int i = 0; i < mon.Length; i++)
             {
                 if (mon[i] == null) break;
-                else if (mon[i].Die ) count++;
+                else if (mon[i].Die) count++;
             }
             if (count == DungeonManager.Dungeons[CurrentStage - 1].Monstercount)
             {
@@ -368,9 +370,11 @@ namespace PokemonT
             playerBattle.PlayerGold += DungeonManager.Dungeons[CurrentStage - 1].Gold;
 
             Console.WriteLine("아무 키나 누르세요.");
+            quest.tossQuestInformation_2(DeathCount(StageMonster));
+            quest.tossQuestInformation_3(DeathCount(StageMonster));
             PlayerAction();
             ResetData();
-            this.DisPlayBattelUI(mainScene, playerBattle);
+            this.DisPlayBattelUI(mainScene, quest, playerBattle);
         }
         public void StageFail()
         {

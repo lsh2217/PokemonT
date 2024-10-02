@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PokemonT
 {
@@ -10,18 +11,37 @@ namespace PokemonT
     internal class StartScene
     {
         Input CInput = new Input();
+        StartAnimation animation = new StartAnimation();
 
-        public Character CharacterSetting() 
+        public Character CharacterSetting(Inventory inventory) 
         {
-            Character player = SetData();
+            Character player = SetData(inventory);
             return player;
         }
        
-        public Character SetData() // 데이터 값 설정하는 함수 (캐릭터 클래스 변수 받아오기)
+        public Character SetData(Inventory inventory) // 데이터 값 설정하는 함수 (캐릭터 클래스 변수 받아오기)
         {
+            StartAnimation.PrintLogo();
+
+            // 시작 대사
+            Console.WriteLine("오박사 : ");
+            Console.WriteLine("안녕! 포켓몬의 세계에 온 걸 환영해!");
+            Console.WriteLine("나는 이 세상에서 '포켓몬'이라 불리는 생명체들을 연구하는 교수를 맡고 있어.");
+            Console.WriteLine();
+            Console.WriteLine();
+
             // 1. 플레이어 이름 입력 받기
-            Console.Write("플레이어 이름을 입력하세요: ");
+            Console.WriteLine("먼저, 너의 이름을 알려줄래?");
+            Console.Write(">> ");
             string name = Console.ReadLine();
+
+            Console.Clear();
+            Console.WriteLine("오박사 : ");
+            Console.WriteLine($"{name}, 멋진 이름이구나.");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("아무 키나 눌러 넘어가기");
+            Console.ReadKey();
 
             // 2. 플레이어 초기 스탯 설정
             int atk = 0;
@@ -31,86 +51,37 @@ namespace PokemonT
 
 
             // 3. 직업 선택
-            string jobs = ChooseJob();
+            ChooseJob selectedJob = new ChooseJob();
+            string jobs = selectedJob.SelectJob();
 
             switch (jobs)
             {
-                case "풀 타입":
-                    atk = 12;
-                    def = 8;
-                    hp = 90;
+                case "포켓몬 트레이너":
+                    atk = 20;
+                    def = 10;
+                    hp = 120;
                     break;
 
-                case "물 타입":
-                    atk = 10;
-                    def = 10;
+                case "포켓몬 브리더":
+                    atk = 15;
+                    def = 15;
                     hp = 100;
                     break;
 
-                case "불 타입":
-                    atk = 14;
-                    def = 6;
-                    hp = 110;
+                case "포켓몬 연구원":
+                    atk = 10;
+                    def = 20;
+                    hp = 80;
                     break;
             }
 
-            // 3. 스타팅 포켓몬 선택
-           //### Monster firstPokemon = ChooseFirstPokemon();
-
+            // 4. 스타팅 포켓몬 선택
+            ChooseStarting firstPokemon = new ChooseStarting();
+            firstPokemon.ChooseFirstPokemon(inventory);
 
             // 객체 생성
             Character Player = new Character(name,jobs, atk, def, hp, gold);
             return Player;
-        }
-
-
-        public string ChooseJob() 
-        {
-            List<string> jobs = new List<string>() { "풀 타입", "물 타입", "불 타입" };
-            Console.WriteLine("트레이너의 타입을 선택하세요:");        
-            for (int i = 0; i < jobs.Count; i++) // 타입 출력
-            {
-                Console.WriteLine($"{i + 1}. {jobs[i]}");
-            }
-
-            int choice = CInput.CheckInput(1, jobs.Count);
-
-            //선택한 숫자에 따라 직업 할당 (switch문)
-            string playerJob = string.Empty;
-            switch (choice)
-            {
-                case 1:
-                    playerJob = jobs[0]; // "풀 타입"
-                    break;
-                case 2:
-                    playerJob = jobs[1]; // "물 타입"
-                    break;
-                case 3:
-                    playerJob = jobs[2]; // "불 타입"
-                    break;
-            }
-            return playerJob;
-        }
-
-        // 스타팅 포켓몬 선택 함수
-        public Monster ChooseFirstPokemon()
-        {
-            List<Monster> FirstMon = new List<Monster>();
-            {
-                // new Monster("이상해씨")
-                // new Monster("꼬부기")
-                // new Monster("파이리")
-            };
-
-            Console.WriteLine("처음에 데리고 갈 포켓몬을 선택하세요:");
-            for (int i = 0; i < FirstMon.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {FirstMon[i].Name} (공격력: {FirstMon[i].Attack}"); // 방어력 추가해야하는데 Monster에 없음
-            }
-
-            int choice = CInput.CheckInput(1, FirstMon.Count);
-            return FirstMon[choice - 1];
-
         }
 
     }
