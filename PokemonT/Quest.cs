@@ -367,7 +367,7 @@ namespace PokemonT
                 playerChoose = CInput.CheckInput(1, 2);
             } else if (allQuestList[i].QuestIsClear)
             {
-                playerChoose = CInput.CheckInput(1, 2);
+                playerChoose = CInput.CheckInput(2, 2);
             }
             if (playerChoose == 1 && returnValues.returnValueClear && !allQuestList[i].QuestIsClear)
             {
@@ -389,9 +389,7 @@ namespace PokemonT
             else
             {
             }
-
-
-
+            DisplayQuestUI(mainScene, player);
         }
     }
 
