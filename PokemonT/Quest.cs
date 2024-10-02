@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace PokemonT
 {
 
-    struct ReturnValues { 
+    public struct ReturnValues { 
         public string returnValueItem;
         public int returnValueGold;
         public bool returnValueClear;
     };
-    class Quest
+    public class Quest
     {
         MainScene mainScene;
         Input CInput = new Input();

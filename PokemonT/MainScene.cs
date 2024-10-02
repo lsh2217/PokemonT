@@ -69,7 +69,7 @@ namespace PokemonT
                     quest.DisplayQuestUI();
                     break;
                 case 5:
-                    Battle.DisPlayBattelUI(this);
+                    Battle.DisPlayBattelUI(this, player);
                     break;
             }
         }
@@ -82,7 +82,7 @@ namespace PokemonT
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("이름" + player.PlayerName);
-            Console.WriteLine("스탯");
+            Console.WriteLine("스탯" + player.PlayerGold);
             Console.WriteLine("장착한 포켓몬");
             Console.WriteLine("퀘스트 달성 현황");
             Console.WriteLine();
