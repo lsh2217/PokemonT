@@ -5,14 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using static PokemonT.Inventory;
 
+
 namespace PokemonT
 {
     public class Shop
     {
+        MainScene mainScene;
+        Quest quest;
         Input CInput = new Input();
-        public void MainShop(int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void MainShop(MainScene displayMainUI, Quest questInfomation, int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
-            
+            quest = questInfomation;
+            mainScene = displayMainUI;
             while (true)
             {
                 Console.Clear();
@@ -21,7 +25,7 @@ namespace PokemonT
                 Console.WriteLine("[아이템 목록]");
 
                 int index = 1;
-                foreach (var item in shopItems) 
+                foreach (var item in shopItems)
                 {
                     Console.WriteLine($"{index++}. {item.Key} | {item.Value.description} | 공격력: {item.Value.attack}, 방어력: {item.Value.defense}");
                 }
@@ -33,7 +37,7 @@ namespace PokemonT
 
                 if (choice == "1")
                 {
-                    PurchaseItem(gold, inventory, shopItems);
+                    PurchaseItem(ref gold, inventory, shopItems);
                 }
                 else if (choice == "2")
                 {
@@ -41,8 +45,7 @@ namespace PokemonT
                 }
                 else if (choice == "0")
                 {
-                    Console.WriteLine("상점을 종료합니다.");
-                    break;
+                    mainScene.DisplayMainUI();
                 }
                 else
                 {
@@ -51,16 +54,22 @@ namespace PokemonT
             }
         }
 
-        public void PurchaseItem(int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void PurchaseItem(ref int gold, Dictionary<string, (int count, bool isEquipped)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             Console.Clear();
             Console.WriteLine("\n구매할 아이템을 선택하세요:");
             int index = 1;
             foreach (var item in shopItems)
             {
-                Console.WriteLine($"{index++}. {item.Key} ({item.Value.description}) | 가격: {item.Value.attack * 10} G");
+                if (!inventory.ContainsKey(item.Key)) // 인벤토리에 없는 아이템만 보여줌
+                {
+                    Console.WriteLine($"{index++}. {item.Key}({item.Value.description}) | 가격: {item.Value.attack * 10} G");
+                }
+                else if (inventory.ContainsKey(item.Key))
+                {
+                    Console.WriteLine($"{index++}. {item.Key}({item.Value.description}) | 가격: {item.Value.attack * 10} G  판매완료");
+                }
             }
-
             Console.WriteLine("0. 나가기");
             string choice = Console.ReadLine();
 
@@ -72,19 +81,23 @@ namespace PokemonT
                 var itemDetails = shopItems[selectedItem];
 
                 int price = itemDetails.attack * 10; // 가격을 공격력에 비례하게 설정
-                
+
                 if (gold >= price)
                 {
-                    gold -= price;
-                
-                    if (inventory.ContainsKey(selectedItem))
+
+
+                    if (inventory.ContainsKey(selectedItem)) //인벤토리 1 2, 3안에 키가 있고 그 키를 상점의 키랑 비교 1,2,3,4,5,6,7
                     {
-                        inventory[selectedItem] = (inventory[selectedItem].count + 1, inventory[selectedItem].isEquipped);
-                       
+                        //inventory[selectedItem] = (inventory[selectedItem].count + 1, inventory[selectedItem].isEquipped);
+                        //inventory[5] = {6,  변수명이 isEquipped 인거지 그냥 샀냐 ? 안샀냐 ?의 변수}
+                        Console.WriteLine("잘못된 입력입니다.");
                     }
                     else
                     {
-                       inventory.Add(selectedItem, (1, false));
+                        gold -= price;
+                        inventory.Add(selectedItem, (1, false));
+                        //quest.tossQuestInformation_0();
+                        //quest.tossQuestInformation_1(price);
                     }
                     Console.WriteLine($"{selectedItem}을(를) 구매했습니다.");
                 }
