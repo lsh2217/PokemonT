@@ -96,8 +96,8 @@ namespace PokemonT
                     {
                         gold -= price;
                         inventory.Add(selectedItem, (1, false));
-                        //quest.tossQuestInformation_0();
-                        //quest.tossQuestInformation_1(price);
+                        quest.tossQuestInformation_0();
+                        quest.tossQuestInformation_1(price);
                     }
                     Console.WriteLine($"{selectedItem}을(를) 구매했습니다.");
                 }

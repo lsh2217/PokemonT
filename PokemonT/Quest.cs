@@ -272,7 +272,7 @@ namespace PokemonT
             else if (i == 1)
             {
                 QuestCheck_1();
-                Console.WriteLine($"[Gold 사용] : [/500]\n");
+                Console.WriteLine($"[Gold 사용] : [{useGoldAmount}/500]\n");
             }
             else if (i == 2)
             {
