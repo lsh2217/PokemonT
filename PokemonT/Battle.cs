@@ -13,7 +13,7 @@ namespace PokemonT
         int PlayerSelect = -1; // 플레이어가 선택한 몬스터 번호
         int MonsterSelect = -1;// 몬스터가 선택한 플레이어 번호
 
-        int CurrentStage; // 현재 스테이지 번호
+        int CurrentStage = -1; // 현재 스테이지 번호
         int MonsterTurnNum = 1; // 적 몬스터의 턴 번호
         int PlayerTurnNum = 1; // 내 몬스터의 턴
         bool MonsterTurn = false; // 적 몬스터의 턴인지 확인
@@ -24,18 +24,20 @@ namespace PokemonT
 
         MonsterManager MonsterManager = new MonsterManager(); // 몬스터 관리 클레스
         DungeonManager DungeonManager; // 스테이지 관리 클레스
-        Monster[] StageMonster = new Monster[6]; // 스테이지에 등장 할 몬스터
+        public Monster[] StageMonster = new Monster[6]; // 스테이지에 등장 할 몬스터
 
         MonsterManager PlayerMonsterManager = new MonsterManager(); // 임시 플레이어
         List<Monster> PlayerMonster = new List<Monster>(); // 임시 플레이어
 
         MainScene mainScene;
         Inventory inven;
+        Character playerBattle;
+        Quest quest;
 
-        int[] MonsterDieID = new int[6];
+        string[] MonsterDieID = new string[6];
         int MCount = 0;
 
-        int[] PlayerDieID = new int[6];
+        string[] PlayerDieID = new string[6];
         int PCount = 0;
 
         public Battle()
@@ -48,10 +50,11 @@ namespace PokemonT
             }
         }
 
-        public void DisPlayBattelUI(MainScene displayMainUI)
+        public void DisPlayBattelUI(MainScene displayMainUI, Quest questInformation, Character player)
         {
             mainScene = displayMainUI;
-
+            playerBattle = player;
+            quest = questInformation;
             Console.Clear();
             Console.WriteLine("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
             for (int i = 0; i < 5; i++)
@@ -59,7 +62,6 @@ namespace PokemonT
                 Console.WriteLine($"{i + 1}. Stage.{i + 1} Lv.{(DungeonManager.Dungeons[i].Level + " 이상" + "")}");
             }
             Console.WriteLine("6. 장착관리");
-            Console.WriteLine("7. 아이템 사용");
             Console.WriteLine("0. 나가기\n");
             PlayerAct = PlayerAction();
             switch (PlayerAct)
@@ -92,22 +94,15 @@ namespace PokemonT
                     //장착관리
                     break;
 
-                case 7:
-                    //아이템 사용
-                    break;
-
                 default:
                     InputFail();
-                    DisPlayBattelUI(displayMainUI);
+                    DisPlayBattelUI(displayMainUI, quest, playerBattle);
                     break;
             }
         }
 
         public void Fight(int stage)
         {
-
-
-
             Console.Clear();
             CurrentStage = stage;
             Console.WriteLine($"Batterl!\n");
@@ -125,37 +120,18 @@ namespace PokemonT
                     Thread.Sleep(1000);
                     Console.WriteLine("아무 키나 누르세요.");
                     ResetData();
-                    DisPlayBattelUI(mainScene);
+                    DisPlayBattelUI(mainScene, quest, playerBattle);
                 }
                 else recount = 0;
             }
 
-            if (PlayerTurn && !MonsterTurn)
-            {
-                for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write($"{PlayerMonster[i].Name}");
-                    Console.ResetColor();
-                    Console.Write("의 공격!");
-                }
-            }
-            else if (!PlayerTurn && MonsterTurn)
-            {
-                for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write($"{StageMonster[i].Name}");
-                    Console.ResetColor();
-                    Console.Write("의 공격!");
-                }
-            }
+            
 
             Console.WriteLine("[적 포켓몬]");
             for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
             {
                 if (StageMonster[i].Die == true) Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.Write($"{(PlayerTurn == true ? (i + 1) + ". " : "")}Lv.{StageMonster[i].Level} {StageMonster[i].Name} HP {StageMonster[i].Hp} 공격력 {StageMonster[i].Attack}");
+                Console.Write($"{(PlayerTurn == true ? (i + 1) + ". " : "")} {StageMonster[i].Name} HP {StageMonster[i].Hp} 공격력 {StageMonster[i].Attack}");
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($" {(MonsterTurnNum == i + 1 && MonsterTurn && !StageMonster[i].Die ? "<== 현재 턴" : "")}");
@@ -167,20 +143,51 @@ namespace PokemonT
             for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
             {
                 if (PlayerMonster[i].Die == true) Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.Write($"Lv.{PlayerMonster[i].Level} {PlayerMonster[i].Name} HP {PlayerMonster[i].Hp} 공격력 {PlayerMonster[i].Attack}");
+                Console.Write($"{PlayerMonster[i].Name} HP {PlayerMonster[i].Hp} 공격력 {PlayerMonster[i].Attack}");
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($" {(PlayerTurnNum == i + 1 && PlayerTurn && !PlayerMonster[i].Die ? "<== 현재 턴" : "")}");
                 Console.ResetColor();
-            }
-
-            Console.WriteLine();
+            }            
 
             if (DeathCount(StageMonster) == DungeonManager.Dungeons[stage - 1].Monstercount) StageClear();
             if (DeathCount(PlayerMonster) == DungeonManager.Dungeons[stage - 1].Monstercount) StageFail();
             if (PlayerTurn && !MonsterTurn) PlayerAttack();
             if (!PlayerTurn && MonsterTurn) MonsterAttack();
 
+            Console.WriteLine();
+            if (PlayerTurn && !MonsterTurn)
+            {
+                for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
+                {
+                    if (PlayerTurnNum - 1 == i)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write($"{PlayerMonster[i].Name}");
+                        Console.ResetColor();
+                        Console.WriteLine("의 공격!");
+                        Thread.Sleep(1000);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"{StageMonster[MonsterSelect - 1].Name}");
+                        Console.ResetColor();
+                        Thread.Sleep(1000);
+                    }
+                }
+            }
+            else if (!PlayerTurn && MonsterTurn)
+            {
+                for (int i = 0; i < DungeonManager.Dungeons[stage - 1].Monstercount; i++)
+                {
+                    if (MonsterTurnNum - 1 == i)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write($"{StageMonster[i].Name}");
+                        Console.ResetColor();
+                        Console.WriteLine("의 공격!");
+                        Thread.Sleep(1000);
+                    }
+                }
+            }
 
         }
         public int DeathCount(List<Monster> mon)
@@ -202,7 +209,8 @@ namespace PokemonT
             int count = 0;
             for (int i = 0; i < mon.Length; i++)
             {
-                if (mon[i].Die) count++;
+                if (mon[i] == null) break;
+                else if (mon[i].Die) count++;
             }
             if (count == DungeonManager.Dungeons[CurrentStage - 1].Monstercount)
             {
@@ -240,19 +248,15 @@ namespace PokemonT
                     }
                     else
                     {
-                        if (StageMonster[MonsterSelect - 1].Hp > 0)
+                        bool success = PerformAttack(PlayerMonster[PlayerTurnNum - 1], StageMonster[MonsterSelect - 1],
+                                            ref PlayerTurnNum, DungeonManager.Dungeons[CurrentStage - 1].Monstercount,
+                                            id => MonsterDieID[MCount++] = id, true);
+
+                        if (!success)
                         {
-                            StageMonster[MonsterSelect - 1].Hp -= PlayerMonster[PlayerTurnNum - 1].Attack;
-                            if (StageMonster[MonsterSelect - 1].Hp <= 0) StageMonster[MonsterSelect - 1].Hp = 0;
-                            PlayerTurnNum++;
+                            PlayerAttack();
                         }
 
-                        if (StageMonster[MonsterSelect - 1].Hp <= 0 && MCount < 6)
-                        {
-                            StageMonster[MonsterSelect - 1].Die = true;
-                            MonsterDieID[MCount] = StageMonster[MonsterSelect - 1].Id;
-                            MCount++;
-                        }
                     }
                 }
                 else PlayerTurnNum++;
@@ -279,20 +283,17 @@ namespace PokemonT
             {
                 if (!StageMonster[MonsterTurnNum - 1].Die)
                 {
-                    if (PlayerMonster[MonsterSelect - 1].Hp > 0)
+                    bool success = PerformAttack(StageMonster[MonsterTurnNum - 1], PlayerMonster[MonsterSelect - 1],
+                                        ref MonsterTurnNum, DungeonManager.Dungeons[CurrentStage - 1].Monstercount,
+                                        id => PlayerDieID[PCount++] = id, false);
+
+                    if (!success)
                     {
-                        PlayerMonster[MonsterSelect - 1].Hp -= StageMonster[MonsterTurnNum - 1].Attack;
-                        if (PlayerMonster[MonsterSelect - 1].Hp < 0) PlayerMonster[MonsterSelect - 1].Hp = 0;
-                        MonsterTurnNum++;
+                        MonsterAttack();
                     }
+
                     Thread.Sleep(1000);
 
-                    if (PlayerMonster[MonsterSelect - 1].Hp <= 0)
-                    {
-                        PlayerMonster[MonsterSelect - 1].Die = true;
-                        PlayerDieID[MCount] = PlayerMonster[MonsterSelect - 1].Id;
-                        PCount++;
-                    }
                 }
                 else MonsterTurnNum++;
             }
@@ -305,19 +306,101 @@ namespace PokemonT
 
             Fight(CurrentStage);
         }
+        private bool PerformAttack(Monster attacker, Monster defender, ref int attackerTurnNum, int maxTurnNum, Action<string> onDeath, bool isPlayer)
+        {
+            // 이미 죽은 몬스터를 공격할 수 없도록 처리
+            if (defender.Die)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{defender.Name}");
+                Console.WriteLine("은(는) 기절했습니다! 다른 몬스터를 선택하세요.");
+                Console.ResetColor();
+                return false; // 공격 실패, 턴 유지
+            }
+
+            if (!attacker.Die && defender.Hp > 0)
+            {
+                Random rand = new Random();
+                int critChance = rand.Next(1, 101);   // 1~100 사이의 랜덤 값
+                int dodgeChance = rand.Next(1, 101);  // 1~100 사이의 랜덤 값
+
+                int attackDamage = attacker.Attack;
+
+                // 회피 처리 (20% 확률)
+                if (dodgeChance <= 20)
+                {
+                    Thread.Sleep(1000);
+                    if(isPlayer)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"{defender.Name}");
+                    Console.ResetColor();
+                    Console.WriteLine("이(가) 공격을 회피했습니다!");
+                    Thread.Sleep(1500);
+                }
+                else
+                {
+                    // 크리티컬 처리 (20% 확률)
+                    if (critChance <= 50)
+                    {
+                        attackDamage *= 2;
+                        Thread.Sleep(1000);
+                        if (isPlayer)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        }
+                        else Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write($"{attacker.Name}");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("이(가) 크리티컬 공격!");
+                        Console.ResetColor();
+                        Thread.Sleep(1000);
+                    }
+
+                    // HP 감소
+                    defender.Hp -= attackDamage;
+                    if (defender.Hp <= 0) defender.Hp = 0;
+                    Thread.Sleep(1000);
+                    if (isPlayer)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    else Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"{defender.Name}");
+                    Console.ResetColor();
+                    Console.WriteLine($"이(가) {attackDamage}의 피해를 입었습니다. 남은 HP: {defender.Hp}");
+                    Thread.Sleep(2000);
+                    // 사망 처리
+                    if (defender.Hp <= 0)
+                    {
+                        defender.Die = true;
+                        onDeath(defender.Id);
+                    }
+                }
+
+                attackerTurnNum++; // 공격이 성공했을 때만 턴 증가
+                return true; // 공격 성공
+            }
+
+            return false; // 공격 실패, 턴 유지
+        }
         public void StageClear()
         {
             Thread.Sleep(1000);
             Console.WriteLine("Stage Clear!\n");
             Console.WriteLine("[획득 보상]");
             Console.WriteLine($"Gold : {DungeonManager.Dungeons[CurrentStage - 1].Gold}");
-            Console.WriteLine($"Exp : {DungeonManager.Dungeons[CurrentStage - 1].Exp}");
-            // 아이템
+            playerBattle.PlayerGold += DungeonManager.Dungeons[CurrentStage - 1].Gold;
 
             Console.WriteLine("아무 키나 누르세요.");
+            quest.tossQuestInformation_2(DeathCount(StageMonster));
+            quest.tossQuestInformation_3(DeathCount(StageMonster));
             PlayerAction();
             ResetData();
-            this.DisPlayBattelUI(mainScene);
+            this.DisPlayBattelUI(mainScene, quest, playerBattle);
         }
         public void StageFail()
         {
@@ -338,6 +421,10 @@ namespace PokemonT
             PlayerTurn = true;
             MonsterTurnNum = 1;
             PlayerTurnNum = 1;
+            PlayerAct = -1;
+            PlayerSelect = -1;
+            MonsterSelect = -1;
+            CurrentStage = -1;
         }
         public int PlayerAction()
         {

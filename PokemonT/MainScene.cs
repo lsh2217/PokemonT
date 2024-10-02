@@ -62,16 +62,16 @@ namespace PokemonT
                     statusScene.DisplayStatusUI(player);
                     break;
                 case 2:
-                    inventory.DisplayInventoryUI(player);
+                    inventory.DisplayInventoryUI(player, this);
                     break;
                 case 3:
-                    shop.MainShop(player.PlayerGold, inventory.inventory , inventory.shopItems);
+                    shop.MainShop(this, quest,  player.PlayerGold, inventory.inventory , inventory.shopItems);
                     break;
                 case 4:
-                    quest.DisplayQuestUI();
+                    quest.DisplayQuestUI(this , player);
                     break;
                 case 5:
-                    Battle.DisPlayBattelUI(this);
+                    Battle.DisPlayBattelUI(this, quest, player);
                     break;
             }
         }
