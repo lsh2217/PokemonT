@@ -23,6 +23,7 @@ namespace PokemonT
 
         public void ChooseFirstPokemon(Inventory inventory)
         {
+                        
             // 세 포켓몬 초기화
             Console.Clear();
             Console.WriteLine("오박사 : ");
