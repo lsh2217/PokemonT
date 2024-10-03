@@ -10,6 +10,8 @@ namespace PokemonT
         Input CInput = new Input();
         public Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems;
         public Dictionary<string, (int count, bool isEquipped , int attack, int defence )> inventory= new Dictionary<string, (int, bool,int,int)>();
+        public Dictionary<int, string> Equippeditems = new Dictionary<int, string>();
+        int EquippedNum = 1;
         MainScene mainScene;
 
         public Inventory()
@@ -32,7 +34,7 @@ namespace PokemonT
             
             if (choice == 1)
             {
-                ShowInventory(ref inventory);
+                ShowInventory(ref inventory, mainScene);
             }
             else if (choice == 0)
             {
@@ -69,8 +71,9 @@ namespace PokemonT
             };
         }
 
-        public void ShowInventory(ref Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory)
+        public void ShowInventory(ref Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, MainScene Main)
         {
+            mainScene = Main;
             Console.Clear();
             Console.WriteLine("\n=== 가방 ===");
             if (inventory.Count == 0)
@@ -81,10 +84,21 @@ namespace PokemonT
 
             foreach (var item in inventory)
             {
-                string equippedStatus = item.Value.isEquipped ? " (E)" : "";
-                Console.WriteLine($"{item.Key} (x{item.Value.count}){equippedStatus}");
+                if(Equippeditems.Count == 0)
+                {
+                    Equippeditems.Add(EquippedNum++, item.Key);
+                }                
+                else if(!Equippeditems.ContainsValue(item.Key) && item.Value.isEquipped && EquippedNum <= 6)
+                {
+                     Equippeditems.Add(EquippedNum++, item.Key);                    
+                }
             }
-
+            
+            foreach (KeyValuePair<int, string> item in Equippeditems)
+            {
+                string equippedStatus = inventory[item.Value].isEquipped ? " (E)" : "";
+                Console.WriteLine($"{item.Key}. ({item.Value}){equippedStatus}");
+            }
             EquipItem(ref inventory); // 장비 아이템 장착 기능 추가
         }
 
@@ -98,7 +112,7 @@ namespace PokemonT
                 if (item.Value.isEquipped == false && item.Value.count > 0)
                 {
                     equipableItems.Add(item.Key);
-                    Console.WriteLine($"{equipableItems.Count}. {item.Key} (x{item.Value.count})");
+                    Console.WriteLine($"{equipableItems.Count}. {item.Key}");
                 }
             }
 
@@ -108,8 +122,21 @@ namespace PokemonT
             int itemIndex = CInput.CheckInput(0, inventory.Count);
             int choice = itemIndex;
             if (choice == 0) mainScene.DisplayMainUI();
+            if (EquippedNum > 6 && itemIndex <= equipableItems.Count)
+            {
+                Console.WriteLine("착용한 장비를 선택해주세요.");
+                int EquipIndex = CInput.CheckInput(1, Equippeditems.Count);
+                var selectedItem = equipableItems[itemIndex - 1];
+                inventory[selectedItem] = (inventory[selectedItem].count, true, inventory[selectedItem].attack, inventory[selectedItem].defence);
 
-            if (itemIndex > 0 && itemIndex <= equipableItems.Count)
+                var selectedEquippeditem = Equippeditems[EquipIndex];
+                inventory[selectedEquippeditem] = (inventory[selectedEquippeditem].count, false, inventory[selectedEquippeditem].attack, inventory[selectedEquippeditem].defence);
+                Equippeditems[EquipIndex] = selectedItem;
+
+
+                ShowInventory(ref inventory, mainScene);
+            }
+            else if (itemIndex > 0 && itemIndex <= equipableItems.Count)
             {
                 var selectedItem = equipableItems[itemIndex - 1];
                 inventory[selectedItem] = (inventory[selectedItem].count, true, inventory[selectedItem].attack, inventory[selectedItem].defence);
@@ -119,12 +146,12 @@ namespace PokemonT
                 Character.ExtraDef += inventory[selectedItem].defence;
 
                 Console.WriteLine($"{selectedItem}을(를) 장착했습니다.");
-                ShowInventory(ref inventory);
+                ShowInventory(ref inventory, mainScene);
             }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
-                EquipItem(ref inventory);
+                ShowInventory(ref inventory, mainScene);
             }
         }
 

@@ -90,7 +90,7 @@ namespace PokemonT
                     break;
 
                 case 6:
-                    //장착관리
+                    inven.ShowInventory(ref inven.inventory, mainScene);
                     break;
 
                 default:
