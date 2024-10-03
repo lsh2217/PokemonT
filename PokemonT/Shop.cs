@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace PokemonT
         Quest quest;
         Character player;
         Input CInput = new Input();
-        public void MainShop(MainScene displayMainUI, Quest questInfomation, Character character, Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void MainShop(MainScene displayMainUI, Quest questInfomation, Character character, Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems, Dictionary<int, string> Equippeditem)
         {
             quest = questInfomation;
             mainScene = displayMainUI;
@@ -45,7 +46,7 @@ namespace PokemonT
                 }
                 else if (choice == "2")
                 {
-                    SellItem(ref gold, inventory, shopItems);
+                    SellItem(ref gold, inventory, shopItems, Equippeditem);
                     character.PlayerGold = gold;
                 }
                 else if (choice == "0")
@@ -98,6 +99,7 @@ namespace PokemonT
                         //inventory[selectedItem] = (inventory[selectedItem].count + 1, inventory[selectedItem].isEquipped);
                         //inventory[5] = {6,  변수명이 isEquipped 인거지 그냥 샀냐 ? 안샀냐 ?의 변수}
                         Console.WriteLine("잘못된 입력입니다.");
+                        Thread.Sleep(1000);
                     }
                     else
                     {
@@ -107,19 +109,22 @@ namespace PokemonT
                         quest.tossQuestInformation_1(price);
                     }
                     Console.WriteLine($"{selectedItem}을(를) 구매했습니다.");
+                    Thread.Sleep(1000);
                 }
                 else
                 {
                     Console.WriteLine("Gold가 부족합니다.");
+                    Thread.Sleep(1000);
                 }
             }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
+                Thread.Sleep(1000);
             }
         }
 
-        public void SellItem(ref int gold, Dictionary<string, (int count, bool isEquipped, int attack , int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void SellItem(ref int gold, Dictionary<string, (int count, bool isEquipped, int attack , int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems, Dictionary<int, string> Equippeditem)
         {
             Console.Clear();
             Console.WriteLine("\n판매할 아이템을 선택하세요:\n\n");
@@ -146,6 +151,11 @@ namespace PokemonT
                     gold += price;
                     if (itemCount == 1)
                     {
+                        if (Equippeditem.ContainsValue(selectedItem))
+                        {
+                            int key = Equippeditem.FirstOrDefault(x => x.Value == selectedItem).Key; // Value 값으로 Key 값 받기
+                            Equippeditem.Remove(key);
+                        }                        
                         inventory.Remove(selectedItem);
                     }
                     else

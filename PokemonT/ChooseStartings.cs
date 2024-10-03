@@ -59,10 +59,7 @@ namespace PokemonT
             // 선택하지 않은 포켓몬들을 상점 아이템(InitializeShopItems)에 넣음
             foreach (var pokemon in FirstPokemons)
             {
-                //if (pokemon.Key != chosenPokemonKey)
-                //{
-                    inventory.shopItems.Add(pokemon.Key, pokemon.Value);
-                //}
+                inventory.shopItems.Add(pokemon.Key, pokemon.Value);
             }
             Console.Clear();
             StartAnimation.Professor();

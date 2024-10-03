@@ -21,6 +21,13 @@ namespace PokemonT
         public Inventory()
         {
             shopItems = InitializeShopItems(); // 상점 아이템 초기화
+            foreach (var item in inventory)
+            {
+                if (!Equippeditems.ContainsValue(item.Key) && item.Value.isEquipped && EquippedNum <= 6)
+                {
+                    Equippeditems.Add(EquippedNum++, item.Key);
+                }
+            }
         }
 
         public void DisplayInventoryUI(Character player, MainScene main)
@@ -84,16 +91,13 @@ namespace PokemonT
             if (inventory.Count == 0)
             {
                 Console.WriteLine("가방에 아이템이 없습니다.");
-                return;
+                Thread.Sleep(1000);
+                mainScene.DisplayMainUI();
             }
 
             foreach (var item in inventory)
             {
-                if(Equippeditems.Count == 0)
-                {
-                    Equippeditems.Add(EquippedNum++, item.Key);
-                }                
-                else if(!Equippeditems.ContainsValue(item.Key) && item.Value.isEquipped && EquippedNum <= 6)
+                if(!Equippeditems.ContainsValue(item.Key) && item.Value.isEquipped && EquippedNum <= 6)
                 {
                      Equippeditems.Add(EquippedNum++, item.Key);                    
                 }
