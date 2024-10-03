@@ -12,7 +12,11 @@ namespace PokemonT
         public Dictionary<string, (int count, bool isEquipped , int attack, int defence )> inventory= new Dictionary<string, (int, bool,int,int)>();
         public Dictionary<int, string> Equippeditems = new Dictionary<int, string>();
         int EquippedNum = 1;
+        int unEquipNum = 0;
+        int reOrderbyCount = 0;
+        
         MainScene mainScene;
+        
 
         public Inventory()
         {
@@ -74,6 +78,7 @@ namespace PokemonT
         public void ShowInventory(ref Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, MainScene Main)
         {
             mainScene = Main;
+            unEquipNum = 0;
             Console.Clear();
             Console.WriteLine("\n=== 가방 ===");
             if (inventory.Count == 0)
@@ -94,10 +99,12 @@ namespace PokemonT
                 }
             }
             
-            foreach (KeyValuePair<int, string> item in Equippeditems)
+            foreach (KeyValuePair<int, string> item in Equippeditems) // 여기를 수정해야되네
             {
+                
                 string equippedStatus = inventory[item.Value].isEquipped ? " (E)" : "";
-                Console.WriteLine($"{item.Key}. ({item.Value}){equippedStatus}");
+                Console.WriteLine($"{unEquipNum-1}. ({item.Value}){equippedStatus}");
+                unEquipNum--;
             }
             EquipItem(ref inventory); // 장비 아이템 장착 기능 추가
         }
@@ -106,6 +113,7 @@ namespace PokemonT
         {
             Console.WriteLine("\n장착할 장비 아이템을 선택하세요:");
             List<string> equipableItems = new List<string>();
+            
 
             foreach (var item in inventory)
             {
@@ -119,10 +127,10 @@ namespace PokemonT
             Console.WriteLine("0. 나가기");
 
             //string choice = Console.ReadLine();
-            int itemIndex = CInput.CheckInput(0, inventory.Count);
+            int itemIndex = CInput.CheckInput(-inventory.Count, inventory.Count);
             int choice = itemIndex;
             if (choice == 0) mainScene.DisplayMainUI();
-            if (EquippedNum > 6 && itemIndex <= equipableItems.Count)
+            if (EquippedNum > 6 && itemIndex <= equipableItems.Count && itemIndex >0) // ?? 누구세요..?
             {
                 Console.WriteLine("착용한 장비를 선택해주세요.");
                 int EquipIndex = CInput.CheckInput(1, Equippeditems.Count);
@@ -139,7 +147,7 @@ namespace PokemonT
             else if (itemIndex > 0 && itemIndex <= equipableItems.Count)
             {
                 var selectedItem = equipableItems[itemIndex - 1];
-                inventory[selectedItem] = (inventory[selectedItem].count, true, inventory[selectedItem].attack, inventory[selectedItem].defence);
+                inventory[selectedItem] = (/*inventory[selectedItem].count*/1, true, inventory[selectedItem].attack, inventory[selectedItem].defence);
 
                 // 장착한 포켓몬 값 플레이어 스탯값에 추가
                 Character.ExtraAtk += inventory[selectedItem].attack;
@@ -147,6 +155,32 @@ namespace PokemonT
 
                 Console.WriteLine($"{selectedItem}을(를) 장착했습니다.");
                 ShowInventory(ref inventory, mainScene);
+
+            } else if (itemIndex <0 && itemIndex >= unEquipNum ) //삭제 구현
+            {
+                string selectedItem = "";
+                foreach (KeyValuePair<int, string> item in Equippeditems)
+                {
+                    if (item.Key == -itemIndex ) {
+                       selectedItem = item.Value;
+                    }
+                }
+                    
+                //var selectedItem = Equippeditems[-itemIndex-1];
+                inventory[selectedItem] = (/*inventory[selectedItem].count*/1, false, inventory[selectedItem].attack, inventory[selectedItem].defence);
+
+                Character.ExtraAtk -= inventory[selectedItem].attack;
+                Character.ExtraDef -= inventory[selectedItem].defence;
+                Equippeditems.Remove(-itemIndex);
+                EquippedNum--;
+                //Equippeditems = Equippeditems.OrderBy(item => item.Key).ToDictionary(x => x.Key, x => x.Value);
+                reOrderbyCount = Equippeditems.Count;
+
+                for (int i = 0; i < reOrderbyCount+itemIndex; i++) 
+                {
+                    RenameEquippeditems(Equippeditems, -itemIndex + 1 + i, -itemIndex+i);
+                }
+                    ShowInventory(ref inventory, mainScene);
             }
             else
             {
@@ -155,7 +189,12 @@ namespace PokemonT
             }
         }
 
-        
+
+        public void RenameEquippeditems<TKey, TValue>(IDictionary<TKey,TValue> dic, TKey fromKey , TKey toKey ) {
+                TValue value = dic[fromKey];
+                dic.Remove(fromKey);
+                dic[toKey] = value;
+        }
     }
 
     

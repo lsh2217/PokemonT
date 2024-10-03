@@ -12,25 +12,28 @@ namespace PokemonT
     {
         MainScene mainScene;
         Quest quest;
+        Character player;
         Input CInput = new Input();
-        public void MainShop(MainScene displayMainUI, Quest questInfomation, int gold, Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void MainShop(MainScene displayMainUI, Quest questInfomation, Character character, Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             quest = questInfomation;
             mainScene = displayMainUI;
+            player = character;
+            int gold = character.PlayerGold;
             while (true)
             {
                 Console.Clear();
                 Console.WriteLine("\n=== 상점 ===");
-                Console.WriteLine($"[보유 골드] {gold} G");
-                Console.WriteLine("[아이템 목록]");
+                Console.WriteLine($"[보유 골드] {character.PlayerGold} G");
+                Console.WriteLine("[아이템 목록]\n\n");
 
                 int index = 1;
                 foreach (var item in shopItems)
                 {
-                    Console.WriteLine($"{index++}. {item.Key} | {item.Value.description} | 공격력: {item.Value.attack}, 방어력: {item.Value.defense}");
+                    Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 방어력:{item.Value.defense}\t|  {item.Value.description}");
                 }
 
-                Console.WriteLine("0. 나가기");
+                Console.WriteLine("\n\n0. 나가기");
                 Console.WriteLine("1. 아이템 구매");
                 Console.WriteLine("2. 아이템 판매");
                 string choice = Console.ReadLine();
@@ -38,10 +41,12 @@ namespace PokemonT
                 if (choice == "1")
                 {
                     PurchaseItem(ref gold, inventory, shopItems);
+                    character.PlayerGold = gold;
                 }
                 else if (choice == "2")
                 {
-                    SellItem(gold, inventory, shopItems);
+                    SellItem(ref gold, inventory, shopItems);
+                    character.PlayerGold = gold;
                 }
                 else if (choice == "0")
                 {
@@ -58,19 +63,21 @@ namespace PokemonT
         {
             Console.Clear();
             Console.WriteLine("\n구매할 아이템을 선택하세요:");
+            Console.WriteLine($"[보유 골드] {gold} G");
+            Console.WriteLine("[아이템 목록]\n\n");
             int index = 1;
             foreach (var item in shopItems)
             {
                 if (!inventory.ContainsKey(item.Key)) // 인벤토리에 없는 아이템만 보여줌
                 {
-                    Console.WriteLine($"{index++}. {item.Key}({item.Value.description}) | 가격: {item.Value.attack * 10} G");
+                    Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 방어력:{item.Value.defense}\t| 가격: {item.Value.attack * 10} G");
                 }
                 else if (inventory.ContainsKey(item.Key))
                 {
-                    Console.WriteLine($"{index++}. {item.Key}({item.Value.description}) | 가격: {item.Value.attack * 10} G  판매완료");
+                    Console.WriteLine($"{index++}. {item.Key} \t|        판매완료\t|");
                 }
             }
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("\n\n0. 나가기");
             string choice = Console.ReadLine();
 
             if (choice == "0") return;
@@ -112,17 +119,18 @@ namespace PokemonT
             }
         }
 
-        public void SellItem(int gold, Dictionary<string, (int count, bool isEquipped, int attack , int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
+        public void SellItem(ref int gold, Dictionary<string, (int count, bool isEquipped, int attack , int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems)
         {
             Console.Clear();
-            Console.WriteLine("\n판매할 아이템을 선택하세요:");
+            Console.WriteLine("\n판매할 아이템을 선택하세요:\n\n");
             int index = 1;
             foreach (var item in inventory)
             {
-                Console.WriteLine($"{index++}. {item.Key} (x{item.Value.count})");
+                Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 방어력:{item.Value.defence}\t|");
+                
             }
 
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("\n\n0. 나가기");
             string choice = Console.ReadLine();
 
             if (choice == "0") return;
