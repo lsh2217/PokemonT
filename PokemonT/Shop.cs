@@ -15,7 +15,7 @@ namespace PokemonT
         Quest quest;
         Character player;
         Input CInput = new Input();
-        public void MainShop(MainScene displayMainUI, Quest questInfomation, Character character, Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems, Dictionary<int, string> Equippeditem)
+        public void MainShop(MainScene displayMainUI, Quest questInfomation, Character character, Dictionary<string, (int count, bool isEquipped, int attack, int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems, Inventory inven)
         {
             quest = questInfomation;
             mainScene = displayMainUI;
@@ -46,7 +46,7 @@ namespace PokemonT
                 }
                 else if (choice == "2")
                 {
-                    SellItem(ref gold, inventory, shopItems, Equippeditem);
+                    SellItem(ref gold, inventory, shopItems, inven);
                     character.PlayerGold = gold;
                 }
                 else if (choice == "0")
@@ -124,7 +124,7 @@ namespace PokemonT
             }
         }
 
-        public void SellItem(ref int gold, Dictionary<string, (int count, bool isEquipped, int attack , int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems, Dictionary<int, string> Equippeditem)
+        public void SellItem(ref int gold, Dictionary<string, (int count, bool isEquipped, int attack , int defence)> inventory, Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems, Inventory inven)
         {
             Console.Clear();
             Console.WriteLine("\n판매할 아이템을 선택하세요:\n\n");
@@ -151,10 +151,18 @@ namespace PokemonT
                     gold += price;
                     if (itemCount == 1)
                     {
-                        if (Equippeditem.ContainsValue(selectedItem))
+                        if (inven.Equippeditems.ContainsValue(selectedItem))
                         {
-                            int key = Equippeditem.FirstOrDefault(x => x.Value == selectedItem).Key; // Value 값으로 Key 값 받기
-                            Equippeditem.Remove(key);
+                            int key = inven.Equippeditems.FirstOrDefault(x => x.Value == selectedItem).Key; // Value 값으로 Key 값 받기
+                            inven.Equippeditems.Remove(key);
+                            inven.EquippedNum--;
+                            //Equippeditems = Equippeditems.OrderBy(item => item.Key).ToDictionary(x => x.Key, x => x.Value);
+                            inven.reOrderbyCount = inven.Equippeditems.Count;
+
+                            for (int i = 0; i < inven.reOrderbyCount - key + 1; i++)
+                            {
+                                inven.RenameEquippeditems(inven.Equippeditems, key + 1 + i, key + i);
+                            }
                         }                        
                         inventory.Remove(selectedItem);
                     }
