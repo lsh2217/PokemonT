@@ -104,7 +104,7 @@ namespace PokemonT
         {
             Console.Clear();
             CurrentStage = stage;
-            Console.WriteLine($"Batterl!\n");
+            Console.WriteLine($"Battle!\n");
             if (BatterStert == false)
             {
                 StagePlayer();

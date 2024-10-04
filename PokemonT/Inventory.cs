@@ -11,9 +11,9 @@ namespace PokemonT
         public Dictionary<string, (string description, int attack, int defense, ItemType type)> shopItems;
         public Dictionary<string, (int count, bool isEquipped , int attack, int defence )> inventory= new Dictionary<string, (int, bool,int,int)>();
         public Dictionary<int, string> Equippeditems = new Dictionary<int, string>();
-        int EquippedNum = 1;
-        int unEquipNum = 0;
-        int reOrderbyCount = 0;
+        public int EquippedNum = 1;
+        public int unEquipNum = 0;
+        public int reOrderbyCount = 0;
         
         MainScene mainScene;
         
@@ -184,7 +184,7 @@ namespace PokemonT
                 {
                     RenameEquippeditems(Equippeditems, -itemIndex + 1 + i, -itemIndex+i);
                 }
-                    ShowInventory(ref inventory, mainScene);
+                ShowInventory(ref inventory, mainScene);
             }
             else
             {
