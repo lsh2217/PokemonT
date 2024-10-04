@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace PokemonT
                 int index = 1;
                 foreach (var item in shopItems)
                 {
-                    Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 방어력:{item.Value.defense}\t|  {item.Value.description}");
+                    Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 체력:{item.Value.defense}\t|  {item.Value.description}");
                 }
 
                 Console.WriteLine("\n\n0. 나가기");
@@ -71,7 +71,7 @@ namespace PokemonT
             {
                 if (!inventory.ContainsKey(item.Key)) // 인벤토리에 없는 아이템만 보여줌
                 {
-                    Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 방어력:{item.Value.defense}\t| 가격: {item.Value.attack * 10} G");
+                    Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 체력:{item.Value.defense}\t| 가격: {item.Value.attack * 10} G");
                 }
                 else if (inventory.ContainsKey(item.Key))
                 {
@@ -131,7 +131,7 @@ namespace PokemonT
             int index = 1;
             foreach (var item in inventory)
             {
-                Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 방어력:{item.Value.defence}\t|");
+                Console.WriteLine($"{index++}. {item.Key}  \t| 공격력:{item.Value.attack} , 체력:{item.Value.defence}\t|");
                 
             }
 

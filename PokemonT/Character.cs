@@ -21,7 +21,7 @@ namespace PokemonT
         public string PlayerName { get; set; }
         public string PlayerJob { get; set; }
         public int PlayerAtk { get; set; }
-        public int PlayerDef { get; set; }
+        public int PlayerDef { get; set; } // 체력으로 대체
         public int PlayerHp { get; set; }
         public int PlayerGold { get; set; }
 
@@ -41,7 +41,7 @@ namespace PokemonT
             PlayerJob = job;
             PlayerAtk = atk;
             PlayerDef = def;
-            PlayerHp = hp;
+            // PlayerHp = hp;
             PlayerGold = gold;
 
             StartingInventory = new Dictionary<string, (int, bool)>();
@@ -67,8 +67,8 @@ namespace PokemonT
         {
             Console.WriteLine($"- 이름 : {PlayerName} ({PlayerJob})" );
             Console.WriteLine(ExtraAtk == 0 ? $"- 공격력 : {PlayerAtk}" : $"- 공격력 : {PlayerAtk} (+{ExtraAtk})");
-            Console.WriteLine(ExtraDef == 0 ? $"- 방어력 : {PlayerDef}" : $"- 방어력 : {PlayerDef} (+{ExtraDef})");
-            Console.WriteLine($"- 체력 : {PlayerHp}");
+            Console.WriteLine(ExtraDef == 0 ? $"- 체력 : {PlayerDef}" : $"- 체력 : {PlayerDef} (+{ExtraDef})");
+            // Console.WriteLine($"- 체력 : {PlayerHp}");
             Console.WriteLine($"- 골드 : {PlayerGold} G");
         } 
 

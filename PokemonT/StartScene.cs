@@ -47,8 +47,8 @@ namespace PokemonT
 
             // 2. 플레이어 초기 스탯 설정
             int atk = 0;
-            int def = 0;
-            int hp = 100;
+            int def = 0; // 체력으로 사용
+            int hp = 100; // 체력 사용하지 않음
             int gold = 10000;
 
 
@@ -60,20 +60,20 @@ namespace PokemonT
             {
                 case "포켓몬 트레이너":
                     atk = 20;
-                    def = 10;
-                    hp = 120;
+                    def = 120;
+                    // hp = 120;
                     break;
 
                 case "포켓몬 브리더":
                     atk = 15;
-                    def = 15;
-                    hp = 100;
+                    def = 150;
+                    // hp = 100;
                     break;
 
                 case "포켓몬 연구원":
                     atk = 10;
-                    def = 20;
-                    hp = 80;
+                    def = 80;
+                    // hp = 80;
                     break;
             }
 
