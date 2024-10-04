@@ -64,7 +64,7 @@ namespace PokemonT
                     inventory.DisplayInventoryUI(player, this);
                     break;
                 case 3:
-                    shop.MainShop(this, quest, player, inventory.inventory , inventory.shopItems, inventory.Equippeditems);
+                    shop.MainShop(this, quest, player, inventory.inventory , inventory.shopItems, inventory);
                     break;
                 case 4:
                     quest.DisplayQuestUI(this , player, inventory);
